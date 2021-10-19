@@ -90,7 +90,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       await _loading();
     } else if (swiperResponse.status == Status.ERROR) {
       setState(() {
-        stateCode = 2;
+        stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = swiperResponse.exception!.getMessage();
       publicToast(errMsg);
