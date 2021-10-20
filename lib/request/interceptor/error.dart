@@ -1,12 +1,13 @@
-import 'dart:io';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
+// ignore_for_file: overridden_fields, avoid_renaming_method_parameters
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 // 异常
-import 'package:flutter_eyepetizer/request/appExceptions.dart';
+import 'package:flutter_eyepetizer/request/app_exceptions.dart';
 
 class MyDioSocketException extends SocketException {
+  @override
   late String message;
 
   MyDioSocketException(

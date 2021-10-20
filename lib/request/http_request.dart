@@ -11,11 +11,11 @@ class Http {
   factory Http() => _instance;
 
   static late final Dio dio;
-  CancelToken _cancelToken = new CancelToken();
+  final CancelToken _cancelToken = CancelToken();
 
   Http._internal() {
     // BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
-    BaseOptions options = new BaseOptions();
+    BaseOptions options = BaseOptions();
 
     dio = Dio(options);
 
@@ -69,7 +69,7 @@ class Http {
       headers: headers ?? const {},
     );
     if (interceptors != null && interceptors.isNotEmpty) {
-      dio.interceptors..addAll(interceptors);
+      dio.interceptors.addAll(interceptors);
     }
   }
 
@@ -84,12 +84,12 @@ class Http {
     Map<String, dynamic>? headers;
     // 从getx或者sputils中获取
     // String accessToken = Global.accessToken;
-    String accessToken = "";
-    if (accessToken != null) {
-      headers = {
-        'Authorization': 'Bearer $accessToken',
-      };
-    }
+    // String accessToken = "";
+    // if (accessToken != null) {
+    //   headers = {
+    //     'Authorization': 'Bearer $accessToken',
+    //   };
+    // }
     return headers;
   }
 

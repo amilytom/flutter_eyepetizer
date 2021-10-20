@@ -28,7 +28,7 @@ class MyButton extends StatelessWidget {
       onPressed: cb!,
       child: Text(
         title!,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
         ),
       ),

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_renaming_method_parameters
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';

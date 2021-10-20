@@ -1,28 +1,29 @@
+// ignore_for_file: avoid_print, unnecessary_null_comparison, must_call_super
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 //
 import 'package:flutter_eyepetizer/schema/type_info.dart';
 //
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/config.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
-import 'package:flutter_eyepetizer/widget/imgState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
 //
-import 'package:flutter_eyepetizer/widget/myButton.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TypeDetaill extends StatefulWidget {
-  TypeDetaill({Key? key}) : super(key: key);
+  const TypeDetaill({Key? key}) : super(key: key);
 
   @override
   _TypeDetaillState createState() => _TypeDetaillState();
@@ -33,14 +34,14 @@ class _TypeDetaillState extends State<TypeDetaill>
   bool? isInit;
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
-  List<TypeInfoItemList?> _itemList = [];
+  final List<TypeInfoItemList?> _itemList = [];
   String initPageUrl = Api.getCategoryDetailList;
   String? nextPageUrl = Api.getCategoryDetailList;
-  String addQuery = '&udid=${uuid}&deviceModel=${device}';
+  String addQuery = '&udid=$uuid&deviceModel=$device';
   bool isShowFloatBtn = false;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   String typeName = Get.parameters["typeName"]!;
   String sliverBg = Get.parameters["headerImg"]!;
@@ -48,8 +49,8 @@ class _TypeDetaillState extends State<TypeDetaill>
   Future<ApiResponse<TypeInfo>> getTypeInfoData() async {
     try {
       String reqUrl = isInit == null
-          ? '${nextPageUrl!}?id=${Get.parameters["id"]!}${addQuery}'
-          : '${nextPageUrl!}${addQuery}';
+          ? '${nextPageUrl!}?id=${Get.parameters["id"]!}$addQuery'
+          : '${nextPageUrl!}$addQuery';
       dynamic response = await HttpUtils.get(reqUrl);
       print(response);
       TypeInfo data = TypeInfo.fromJson(response);
@@ -80,7 +81,7 @@ class _TypeDetaillState extends State<TypeDetaill>
       });
       String errMsg = typeInfoResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置type_detaill， url: ${nextPageUrl}");
+      print("发生错误，位置type_detaill， url: $nextPageUrl");
     }
   }
 
@@ -146,109 +147,107 @@ class _TypeDetaillState extends State<TypeDetaill>
               String videoTitle = _itemList[idx]!.data!.title!;
               // String authorIcon = _typeInfo!.itemList![idx]!.data!.author!.icon!;
               // String authorName = _typeInfo!.itemList![idx]!.data!.author!.name!;
-              return Container(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 10,
-                    left: 10,
-                    right: 10,
-                    bottom: 0,
-                  ),
-                  child: Column(
-                    children: [
-                      VideoFactory(
-                        id: _itemList[idx]!.data!.id!.toString(),
-                        playUrl: _itemList[idx]!.data!.playUrl!,
-                        title: _itemList[idx]!.data!.title!,
-                        typeName: _itemList[idx]!.data!.category!,
-                        desText: _itemList[idx]!.data!.description!,
-                        subTime: DateTime.fromMillisecondsSinceEpoch(
-                                _itemList[idx]!.data!.releaseTime!)
-                            .toString()
-                            .substring(0, 19),
-                        avatarUrl: _itemList[idx]!.data!.author != null
-                            ? _itemList[idx]!.data!.author!.icon!
-                            : "",
-                        authorDes: _itemList[idx]!.data!.author != null
-                            ? _itemList[idx]!.data!.author!.description!
-                            : "",
-                        authorName: _itemList[idx]!.data!.author != null
-                            ? _itemList[idx]!.data!.author!.name!
-                            : "",
-                        videoPoster: videoPoster,
-                        child: Container(
-                          height: 210,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                top: 0,
-                                child: FadeInImage(
-                                  placeholder:
-                                      AssetImage('images/movie-lazy.gif'),
-                                  image: NetworkImage(videoPoster),
-                                  imageErrorBuilder: (context, obj, trace) {
-                                    return ImgState(
-                                      msg: "加载失败",
-                                      icon: Icons.broken_image,
-                                    );
-                                  },
-                                  fit: BoxFit.cover,
-                                ),
+              return Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 10,
+                  right: 10,
+                  bottom: 0,
+                ),
+                child: Column(
+                  children: [
+                    VideoFactory(
+                      id: _itemList[idx]!.data!.id!.toString(),
+                      playUrl: _itemList[idx]!.data!.playUrl!,
+                      title: _itemList[idx]!.data!.title!,
+                      typeName: _itemList[idx]!.data!.category!,
+                      desText: _itemList[idx]!.data!.description!,
+                      subTime: DateTime.fromMillisecondsSinceEpoch(
+                              _itemList[idx]!.data!.releaseTime!)
+                          .toString()
+                          .substring(0, 19),
+                      avatarUrl: _itemList[idx]!.data!.author != null
+                          ? _itemList[idx]!.data!.author!.icon!
+                          : "",
+                      authorDes: _itemList[idx]!.data!.author != null
+                          ? _itemList[idx]!.data!.author!.description!
+                          : "",
+                      authorName: _itemList[idx]!.data!.author != null
+                          ? _itemList[idx]!.data!.author!.name!
+                          : "",
+                      videoPoster: videoPoster,
+                      child: SizedBox(
+                        height: 210,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              top: 0,
+                              child: FadeInImage(
+                                placeholder:
+                                    const AssetImage('images/movie-lazy.gif'),
+                                image: NetworkImage(videoPoster),
+                                imageErrorBuilder: (context, obj, trace) {
+                                  return ImgState(
+                                    msg: "加载失败",
+                                    icon: Icons.broken_image,
+                                  );
+                                },
+                                fit: BoxFit.cover,
                               ),
-                              Positioned(
-                                left: 10,
-                                top: 10,
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(0, 0, 0, 0.5),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(25),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    videoCategory,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.white),
+                            ),
+                            Positioned(
+                              left: 10,
+                              top: 10,
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                alignment: Alignment.center,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromRGBO(0, 0, 0, 0.5),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
                                   ),
                                 ),
+                                child: Text(
+                                  videoCategory,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      VideoBanner(
-                        avatarUrl: isNotExistAuthor
-                            ? ""
-                            : _itemList[idx]!.data!.author!.icon!,
-                        rowTitle: videoTitle,
-                        isAssets: isNotExistAuthor,
-                        rowDes: isNotExistAuthor
-                            ? ""
-                            : _itemList[idx]!.data!.author!.name!,
-                        slotChild: MyIconButton(
-                          icon: Icon(
-                            Icons.share,
-                            size: 30,
-                            color: Colors.black54,
-                          ),
-                          cb: () {},
+                    ),
+                    VideoBanner(
+                      avatarUrl: isNotExistAuthor
+                          ? ""
+                          : _itemList[idx]!.data!.author!.icon!,
+                      rowTitle: videoTitle,
+                      isAssets: isNotExistAuthor,
+                      rowDes: isNotExistAuthor
+                          ? ""
+                          : _itemList[idx]!.data!.author!.name!,
+                      slotChild: MyIconButton(
+                        icon: const Icon(
+                          Icons.share,
+                          size: 30,
+                          color: Colors.black54,
                         ),
+                        cb: () {},
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Divider(
-                        height: 1,
-                        color: Colors.black12,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Divider(
+                      height: 1,
+                      color: Colors.black12,
+                    ),
+                  ],
                 ),
               );
             },
@@ -263,7 +262,7 @@ class _TypeDetaillState extends State<TypeDetaill>
   Widget build(BuildContext context) {
     Widget bodyView;
     if (stateCode == 0) {
-      bodyView = MyLoading(message: "加载中");
+      bodyView = const MyLoading(message: "加载中");
     } else if (stateCode == 1) {
       bodyView = SmartRefresher(
         controller: _refreshController,
@@ -273,11 +272,11 @@ class _TypeDetaillState extends State<TypeDetaill>
           builder: (context, mode) {
             Widget? body;
             if (mode == LoadStatus.idle) {
-              body = Text("上拉加载");
+              body = const Text("上拉加载");
             } else if (mode == LoadStatus.loading) {
               body = Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: const <Widget>[
                   SizedBox(
                     width: 30,
                     height: 30,
@@ -288,13 +287,13 @@ class _TypeDetaillState extends State<TypeDetaill>
                 ],
               );
             } else if (mode == LoadStatus.failed) {
-              body = Text("加载失败！点击重试！");
+              body = const Text("加载失败！点击重试！");
             } else if (mode == LoadStatus.canLoading) {
-              body = Text("松手,加载更多！");
+              body = const Text("松手,加载更多！");
             } else if (mode == LoadStatus.noMore) {
-              body = Text("没有更多数据了！");
+              body = const Text("没有更多数据了！");
             }
-            return Container(
+            return SizedBox(
               height: 55.0,
               child: Center(child: body),
             );
@@ -311,7 +310,7 @@ class _TypeDetaillState extends State<TypeDetaill>
           });
           await _loading();
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.new_releases,
           size: 100,
           color: Colors.red,
@@ -336,11 +335,11 @@ class _TypeDetaillState extends State<TypeDetaill>
               onPressed: () {
                 _scrollController.animateTo(
                   .0,
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                   curve: Curves.ease,
                 );
               },
-              child: Icon(Icons.arrow_upward),
+              child: const Icon(Icons.arrow_upward),
             )
           : null,
     );

@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 
 class ImgState extends StatelessWidget {
@@ -15,7 +17,7 @@ class ImgState extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: errBgColor,
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
       ),
       child: Center(
         child: Column(
@@ -23,8 +25,8 @@ class ImgState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 36, color: Colors.black26),
-            SizedBox(height: 3),
-            Text(msg, style: TextStyle(color: Colors.black26))
+            const SizedBox(height: 3),
+            Text(msg, style: const TextStyle(color: Colors.black26))
           ],
         ),
       ),

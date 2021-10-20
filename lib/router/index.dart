@@ -1,4 +1,4 @@
-// page views
+// ignore_for_file: non_constant_identifier_names
 import 'package:flutter_eyepetizer/pages/home/module.dart' show Home;
 import 'package:flutter_eyepetizer/pages/reel_detaill/module.dart'
     show ReelDetaill;
@@ -29,27 +29,27 @@ class PageRoutes {
   static final List<GetPage<dynamic>> routes = [
     GetPage(
       name: PageName.HOME,
-      page: () => Home(),
+      page: () => const Home(),
     ),
     GetPage(
       name: PageName.SEARCH,
-      page: () => VideoSearchPage(),
+      page: () => const VideoSearchPage(),
     ),
     GetPage(
       name: PageName.REEL_DETAILL,
-      page: () => ReelDetaill(),
+      page: () => const ReelDetaill(),
     ),
     GetPage(
       name: PageName.VIDEO_DETAILL,
-      page: () => VideoDetaill(),
+      page: () => const VideoDetaill(),
     ),
     GetPage(
       name: PageName.TYPE_DETAILL,
-      page: () => TypeDetaill(),
+      page: () => const TypeDetaill(),
     ),
     GetPage(
       name: PageName.USER_DECLARE,
-      page: () => UserDeclare(),
+      page: () => const UserDeclare(),
     ),
     GetPage(
       name: PageName.VIDEO_HISTORY,

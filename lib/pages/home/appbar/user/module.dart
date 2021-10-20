@@ -1,3 +1,4 @@
+// ignore_for_file: must_call_super, must_be_immutable
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -9,7 +10,7 @@ import 'package:share_extend/share_extend.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppBarTabUser extends StatefulWidget {
-  AppBarTabUser({Key? key}) : super(key: key);
+  const AppBarTabUser({Key? key}) : super(key: key);
 
   @override
   _AppBarTabUserState createState() => _AppBarTabUserState();
@@ -73,7 +74,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       appBar: AppBar(
         title: Container(
           alignment: Alignment.center,
-          child: Text("我的"),
+          child: const Text("我的"),
         ),
       ),
       body: SingleChildScrollView(
@@ -81,7 +82,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
         child: Column(
           children: [
             CartStatic(
-              Container(
+              SizedBox(
                 height: 200,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -92,20 +93,18 @@ class _AppBarTabUserState extends State<AppBarTabUser>
                         height: 100,
                         color: Colors.black12,
                         child: Padding(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           child: Image.asset("images/user-logo.jpg"),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Container(
-                      child: Text(
-                        "开不开眼？",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "开不开眼？",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 18,
                       ),
                     )
                   ],
@@ -123,11 +122,11 @@ class _AppBarTabUserState extends State<AppBarTabUser>
                       icon: e["icon"]!,
                     );
                   }
-                  return Divider(height: 1);
+                  return const Divider(height: 1);
                 }).toList(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -145,7 +144,7 @@ class CartStatic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, right: 10, left: 10),
+      padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -155,14 +154,14 @@ class CartStatic extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              offset: Offset(0.0, 0.0),
+              offset: const Offset(0.0, 0.0),
               blurRadius: 10,
               spreadRadius: 8,
             ),
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: child,
         ),
       ),
@@ -175,7 +174,7 @@ class MenuRow extends StatelessWidget {
   final String name;
   final Color icoColor;
   final IconData icon;
-  MenuRow({
+  const MenuRow({
     Key? key,
     required this.cb,
     required this.icon,
@@ -191,10 +190,10 @@ class MenuRow extends StatelessWidget {
         onTap: () {
           cb();
         },
-        child: Container(
+        child: SizedBox(
           height: 54,
           child: Padding(
-            padding: EdgeInsets.only(left: 15, right: 15),
+            padding: const EdgeInsets.only(left: 15, right: 15),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -203,10 +202,10 @@ class MenuRow extends StatelessWidget {
                   color: icoColor,
                   size: 28,
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Text(
                   name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.black87,

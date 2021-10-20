@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_eyepetizer/widget/myButton.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
 
 typedef ButtonCb = void Function();
 
@@ -24,11 +24,11 @@ class MyState extends StatelessWidget {
         children: [
           icon,
           Padding(
-            padding: EdgeInsets.only(top: 3, bottom: 3),
+            padding: const EdgeInsets.only(top: 3, bottom: 3),
             child: Center(
               child: Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                 ),
               ),

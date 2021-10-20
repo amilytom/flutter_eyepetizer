@@ -1,12 +1,13 @@
+// ignore_for_file: must_call_super, prefer_const_constructors, avoid_print
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 //
 import 'package:flutter_eyepetizer/router/index.dart';
 //
@@ -15,15 +16,15 @@ import 'package:flutter_eyepetizer/schema/popular_coll.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myButton.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppBarTabPopular extends StatefulWidget {
-  AppBarTabPopular({Key? key}) : super(key: key);
+  const AppBarTabPopular({Key? key}) : super(key: key);
 
   @override
   _AppBarTabPopularState createState() => _AppBarTabPopularState();
@@ -78,7 +79,7 @@ class _AppBarTabPopularState extends State<AppBarTabPopular>
 
 class TabBarItemCart extends StatefulWidget {
   final String url;
-  TabBarItemCart(this.url, {Key? key}) : super(key: key);
+  const TabBarItemCart(this.url, {Key? key}) : super(key: key);
 
   @override
   _TabBarItemCartState createState() => _TabBarItemCartState();
@@ -95,9 +96,9 @@ class _TabBarItemCartState extends State<TabBarItemCart>
   String? initPageUrl = "";
   String? nextPageUrl = "";
   bool isShowFloatBtn = false;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   Future<ApiResponse<PopularColl>> getFollowData() async {
     try {
@@ -140,7 +141,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
       });
       String errMsg = itemResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar3 => 热门， url: ${nextPageUrl}");
+      print("发生错误，位置home bottomBar3 => 热门， url: $nextPageUrl");
     }
   }
 
@@ -198,7 +199,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
             } else if (mode == LoadStatus.loading) {
               body = Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: const <Widget>[
                   SizedBox(
                     width: 30,
                     height: 30,
@@ -215,7 +216,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
             } else if (mode == LoadStatus.noMore) {
               body = Text("没有更多数据了！");
             }
-            return Container(
+            return SizedBox(
               height: 55.0,
               child: Center(child: body),
             );
@@ -254,7 +255,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
                         ? _itemList[idx]!.data!.author!.name!
                         : "",
                     videoPoster: videoPoster,
-                    child: Container(
+                    child: SizedBox(
                       height: 210,
                       child: Stack(
                         children: [

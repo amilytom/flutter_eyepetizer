@@ -1,12 +1,14 @@
+// ignore_for_file: must_call_super, avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 //
 import 'package:flutter_eyepetizer/router/index.dart';
 //
@@ -17,15 +19,15 @@ import 'package:flutter_eyepetizer/schema/types.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myButton.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppBarTabExplore extends StatefulWidget {
-  AppBarTabExplore({Key? key}) : super(key: key);
+  const AppBarTabExplore({Key? key}) : super(key: key);
 
   @override
   _AppBarTabExploreState createState() => _AppBarTabExploreState();
@@ -33,7 +35,7 @@ class AppBarTabExplore extends StatefulWidget {
 
 class _AppBarTabExploreState extends State<AppBarTabExplore>
     with AutomaticKeepAliveClientMixin {
-  List<Widget> _tabLabelList = [
+  final List<Widget> _tabLabelList = [
     '关注',
     '分类',
     '专题',
@@ -42,10 +44,10 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
       text: e,
     );
   }).toList();
-  List<Widget> _tabBodyList = [
-    FollowTab(),
-    TypesTab(),
-    ReelTab(),
+  final List<Widget> _tabBodyList = [
+    const FollowTab(),
+    const TypesTab(),
+    const ReelTab(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -57,11 +59,11 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
           leading: Container(),
           title: Container(
             alignment: Alignment.center,
-            child: Text("发现"),
+            child: const Text("发现"),
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () {
                 Get.toNamed(PageName.SEARCH);
               },
@@ -84,7 +86,7 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
 
 // 关注
 class FollowTab extends StatefulWidget {
-  FollowTab({Key? key}) : super(key: key);
+  const FollowTab({Key? key}) : super(key: key);
 
   @override
   FollowTabState createState() => FollowTabState();
@@ -99,9 +101,9 @@ class FollowTabState extends State<FollowTab>
   String initPageUrl = Api.getFollowInfo;
   String? nextPageUrl = Api.getFollowInfo;
   bool isShowFloatBtn = false;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   Future<ApiResponse<Follow>> getFollowData() async {
     try {
@@ -143,7 +145,7 @@ class FollowTabState extends State<FollowTab>
       });
       String errMsg = itemResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar2 tab1 => 关注， url: ${nextPageUrl}");
+      print("发生错误，位置home bottomBar2 tab1 => 关注， url: $nextPageUrl");
     }
   }
 
@@ -188,7 +190,7 @@ class FollowTabState extends State<FollowTab>
   Widget build(BuildContext context) {
     Widget body;
     if (stateCode == 0) {
-      body = MyLoading(message: "加载中");
+      body = const MyLoading(message: "加载中");
     } else if (stateCode == 1) {
       body = SmartRefresher(
         enablePullDown: true,
@@ -197,11 +199,11 @@ class FollowTabState extends State<FollowTab>
           builder: (context, mode) {
             Widget? body;
             if (mode == LoadStatus.idle) {
-              body = Text("上拉加载");
+              body = const Text("上拉加载");
             } else if (mode == LoadStatus.loading) {
               body = Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: const <Widget>[
                   SizedBox(
                     width: 30,
                     height: 30,
@@ -212,13 +214,13 @@ class FollowTabState extends State<FollowTab>
                 ],
               );
             } else if (mode == LoadStatus.failed) {
-              body = Text("加载失败！点击重试！");
+              body = const Text("加载失败！点击重试！");
             } else if (mode == LoadStatus.canLoading) {
-              body = Text("松手,加载更多！");
+              body = const Text("松手,加载更多！");
             } else if (mode == LoadStatus.noMore) {
-              body = Text("没有更多数据了！");
+              body = const Text("没有更多数据了！");
             }
-            return Container(
+            return SizedBox(
               height: 55.0,
               child: Center(child: body),
             );
@@ -241,8 +243,8 @@ class FollowTabState extends State<FollowTab>
                       .toString()
                       .substring(0, 19);
               return Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Container(
+                padding: const EdgeInsets.only(right: 8),
+                child: SizedBox(
                   width: 260,
                   child: Column(
                     children: [
@@ -266,7 +268,7 @@ class FollowTabState extends State<FollowTab>
                             ? item.data!.author!.name!
                             : "",
                         videoPoster: curVideoItemPoster,
-                        child: Container(
+                        child: SizedBox(
                           height: 160,
                           child: Stack(
                             children: [
@@ -277,7 +279,7 @@ class FollowTabState extends State<FollowTab>
                                 top: 0,
                                 child: FadeInImage(
                                   placeholder:
-                                      AssetImage('images/movie-lazy.gif'),
+                                      const AssetImage('images/movie-lazy.gif'),
                                   image: NetworkImage(curVideoItemPoster),
                                   imageErrorBuilder: (context, obj, trace) {
                                     return ImgState(
@@ -292,12 +294,13 @@ class FollowTabState extends State<FollowTab>
                                 right: 10,
                                 top: 10,
                                 child: Container(
-                                  color: Color.fromRGBO(255, 255, 255, 0.9),
+                                  color:
+                                      const Color.fromRGBO(255, 255, 255, 0.9),
                                   child: Padding(
-                                    padding: EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(5),
                                     child: Text(
                                       curVideoItemCategory,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -310,34 +313,30 @@ class FollowTabState extends State<FollowTab>
                         ),
                       ),
                       Expanded(
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 5, right: 5),
+                            padding: const EdgeInsets.only(left: 5, right: 5),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  child: Text(
-                                    curVideoItemTitle,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
+                                Text(
+                                  curVideoItemTitle,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                SizedBox(height: 2),
-                                Container(
-                                  child: Text(
-                                    curVideoItemSubTime,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Colors.black45,
-                                    ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  curVideoItemSubTime,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Colors.black45,
                                   ),
                                 ),
                               ],
@@ -351,46 +350,44 @@ class FollowTabState extends State<FollowTab>
               );
             }).toList();
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: Colors.black12),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   left: 10,
                   right: 10,
                   top: 8,
                   bottom: 0,
                 ),
-                child: Container(
-                  child: Column(
-                    children: [
-                      VideoBanner(
-                        avatarUrl: authorIcon,
-                        rowTitle: authorName,
-                        rowDes: authorDes,
-                        slotChild: MyIconButton(
-                          icon: Icon(
-                            Icons.share,
-                            size: 28,
-                            color: Colors.black54,
-                          ),
-                          cb: () {},
+                child: Column(
+                  children: [
+                    VideoBanner(
+                      avatarUrl: authorIcon,
+                      rowTitle: authorName,
+                      rowDes: authorDes,
+                      slotChild: MyIconButton(
+                        icon: const Icon(
+                          Icons.share,
+                          size: 28,
+                          color: Colors.black54,
+                        ),
+                        cb: () {},
+                      ),
+                    ),
+                    SizedBox(
+                      height: 220,
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: curCartChildList,
                         ),
                       ),
-                      Container(
-                        height: 220,
-                        width: double.infinity,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: curCartChildList,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -412,7 +409,7 @@ class FollowTabState extends State<FollowTab>
           // 重新加载
           await _refresh();
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.new_releases,
           size: 100,
           color: Colors.red,
@@ -429,11 +426,11 @@ class FollowTabState extends State<FollowTab>
               onPressed: () {
                 _scrollController.animateTo(
                   .0,
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                   curve: Curves.ease,
                 );
               },
-              child: Icon(Icons.arrow_upward),
+              child: const Icon(Icons.arrow_upward),
             )
           : null,
       body: body,
@@ -446,7 +443,7 @@ class FollowTabState extends State<FollowTab>
 
 // 分类
 class TypesTab extends StatefulWidget {
-  TypesTab({Key? key}) : super(key: key);
+  const TypesTab({Key? key}) : super(key: key);
 
   @override
   _TypesTabState createState() => _TypesTabState();
@@ -456,7 +453,7 @@ class _TypesTabState extends State<TypesTab>
     with AutomaticKeepAliveClientMixin {
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
-  List<TypesData?> _typeList = [];
+  final List<TypesData?> _typeList = [];
   String typesUrl = Api.getCategory;
 
   Future<ApiResponse<Types>> getTypesData() async {
@@ -487,7 +484,7 @@ class _TypesTabState extends State<TypesTab>
       });
       String errMsg = typeResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar2 tab2 => 分类， url: ${typesUrl}");
+      print("发生错误，位置home bottomBar2 tab2 => 分类， url: $typesUrl");
     }
   }
 
@@ -501,13 +498,13 @@ class _TypesTabState extends State<TypesTab>
   Widget build(BuildContext context) {
     Widget bodyView;
     if (stateCode == 0) {
-      bodyView = MyLoading(message: "加载中");
+      bodyView = const MyLoading(message: "加载中");
     } else if (stateCode == 1) {
       bodyView = Padding(
-        padding: EdgeInsets.all(3),
+        padding: const EdgeInsets.all(3),
         child: GridView.builder(
           itemCount: _typeList.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, //每行三列
             childAspectRatio: 1.0, //显示区域宽高相等
             mainAxisSpacing: 3,
@@ -529,48 +526,46 @@ class _TypesTabState extends State<TypesTab>
                   },
                 );
               },
-              child: Container(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      top: 0,
-                      child: FadeInImage(
-                        height: 220,
-                        placeholder: AssetImage('images/movie-lazy.gif'),
-                        image: NetworkImage(posterUrl),
-                        imageErrorBuilder: (context, obj, trace) {
-                          return ImgState(
-                            msg: "加载失败",
-                            icon: Icons.broken_image,
-                            errBgColor: Colors.black,
-                          );
-                        },
-                        fit: BoxFit.cover,
-                      ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    top: 0,
+                    child: FadeInImage(
+                      height: 220,
+                      placeholder: const AssetImage('images/movie-lazy.gif'),
+                      image: NetworkImage(posterUrl),
+                      imageErrorBuilder: (context, obj, trace) {
+                        return ImgState(
+                          msg: "加载失败",
+                          icon: Icons.broken_image,
+                          errBgColor: Colors.black,
+                        );
+                      },
+                      fit: BoxFit.cover,
                     ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      top: 0,
-                      child: Container(
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
-                        alignment: Alignment.center,
-                        child: Text(
-                          curTypeName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    top: 0,
+                    child: Container(
+                      color: const Color.fromRGBO(0, 0, 0, 0.5),
+                      alignment: Alignment.center,
+                      child: Text(
+                        curTypeName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             );
           },
@@ -585,7 +580,7 @@ class _TypesTabState extends State<TypesTab>
           // 重新加载
           await _refresh();
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.new_releases,
           size: 100,
           color: Colors.red,
@@ -607,7 +602,7 @@ class _TypesTabState extends State<TypesTab>
 
 // 专题
 class ReelTab extends StatefulWidget {
-  ReelTab({Key? key}) : super(key: key);
+  const ReelTab({Key? key}) : super(key: key);
 
   @override
   _ReelTabState createState() => _ReelTabState();
@@ -621,9 +616,9 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
   String initPageUrl = Api.topicsUrl;
   String? nextPageUrl = Api.topicsUrl;
   bool isShowFloatBtn = false;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   Future<ApiResponse<Reel>> getReelData() async {
     try {
@@ -665,7 +660,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
       });
       String errMsg = reelResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar2 tab3 => 专题， url: ${nextPageUrl}");
+      print("发生错误，位置home bottomBar2 tab3 => 专题， url: $nextPageUrl");
     }
   }
 
@@ -710,7 +705,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     Widget bodyView;
     if (stateCode == 0) {
-      bodyView = MyLoading(message: "加载中");
+      bodyView = const MyLoading(message: "加载中");
     } else if (stateCode == 1) {
       bodyView = SmartRefresher(
         enablePullDown: true,
@@ -719,11 +714,11 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
           builder: (context, mode) {
             Widget? body;
             if (mode == LoadStatus.idle) {
-              body = Text("上拉加载");
+              body = const Text("上拉加载");
             } else if (mode == LoadStatus.loading) {
               body = Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: const <Widget>[
                   SizedBox(
                     width: 30,
                     height: 30,
@@ -734,13 +729,13 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                 ],
               );
             } else if (mode == LoadStatus.failed) {
-              body = Text("加载失败！点击重试！");
+              body = const Text("加载失败！点击重试！");
             } else if (mode == LoadStatus.canLoading) {
-              body = Text("松手,加载更多！");
+              body = const Text("松手,加载更多！");
             } else if (mode == LoadStatus.noMore) {
-              body = Text("没有更多数据了！");
+              body = const Text("没有更多数据了！");
             }
-            return Container(
+            return SizedBox(
               height: 55.0,
               child: Center(child: body),
             );
@@ -750,13 +745,13 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
           itemBuilder: (BuildContext ctx, int idx) {
             String curReelItemPoster = _reelList[idx]!.data!.image!;
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: Colors.black12),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: GestureDetector(
                   onTap: () {
                     try {
@@ -781,10 +776,10 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                       publicToast("发生错误");
                     }
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 210,
                     child: FadeInImage(
-                      placeholder: AssetImage('images/movie-lazy.gif'),
+                      placeholder: const AssetImage('images/movie-lazy.gif'),
                       image: NetworkImage(curReelItemPoster),
                       imageErrorBuilder: (context, obj, trace) {
                         return ImgState(
@@ -816,7 +811,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
           // 重新加载
           await _refresh();
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.new_releases,
           size: 100,
           color: Colors.red,
@@ -834,11 +829,11 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
               onPressed: () {
                 _scrollController.animateTo(
                   .0,
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                   curve: Curves.ease,
                 );
               },
-              child: Icon(Icons.arrow_upward),
+              child: const Icon(Icons.arrow_upward),
             )
           : null,
     );

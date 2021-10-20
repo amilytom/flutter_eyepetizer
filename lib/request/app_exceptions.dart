@@ -10,6 +10,7 @@ class AppException implements Exception {
     this._message,
   );
 
+  @override
   String toString() {
     return "$_code$_message";
   }

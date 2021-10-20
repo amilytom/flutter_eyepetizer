@@ -1,38 +1,44 @@
+// ignore_for_file: unnecessary_brace_in_string_interps, must_call_super, non_constant_identifier_names, avoid_print
 import 'package:dio/dio.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
 import 'package:flutter_eyepetizer/fijkplayer_skin/fijkplayer_skin.dart';
 //
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 //
 import 'package:flutter_eyepetizer/schema/video_related.dart';
 //
-import 'package:flutter_eyepetizer/service/videoHistory.dart';
+import 'package:flutter_eyepetizer/service/video_history.dart';
 //
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 
 class PlayerShowConfig implements ShowConfigAbs {
+  @override
   bool speedBtn = true;
+  @override
   bool topBar = true;
+  @override
   bool lockBtn = true;
+  @override
   bool bottomPro = true;
+  @override
   bool stateAuto = true;
 }
 
 class VideoDetaill extends StatefulWidget {
-  VideoDetaill({Key? key}) : super(key: key);
+  const VideoDetaill({Key? key}) : super(key: key);
 
   @override
   _VideoDetaillState createState() => _VideoDetaillState();
@@ -65,7 +71,7 @@ class _VideoDetaillState extends State<VideoDetaill>
     super.initState();
     // 设置播放源
     Future.delayed(
-      Duration(milliseconds: 400),
+      const Duration(milliseconds: 400),
       () {
         setState(() {
           isShowPlayer = true;
@@ -165,7 +171,7 @@ class VideoInfo extends StatefulWidget {
   final String authorDes;
   final bool isNotAuthor;
   final FijkPlayer player;
-  VideoInfo({
+  const VideoInfo({
     Key? key,
     required this.id,
     required this.title,
@@ -191,7 +197,7 @@ class _VideoInfoState extends State<VideoInfo>
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
   String nextPageUrl = Api.getRelatedData;
-  List<VideoRelatedItemList?> _itemList = [];
+  final List<VideoRelatedItemList?> _itemList = [];
 
   Future<ApiResponse<VideoRelated>> getVideoRelatedData() async {
     try {
@@ -237,166 +243,157 @@ class _VideoInfoState extends State<VideoInfo>
     if (stateCode == 0) {
       bodyView = Container(
         alignment: Alignment.center,
-        child: MyLoading(message: "加载中"),
+        child: const MyLoading(message: "加载中"),
       );
     } else if (stateCode == 1) {
-      bodyView = Container(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: Column(
-                    children: [
-                      // 标题
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            widget.title,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+      bodyView = SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                children: [
+                  // 标题
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
-                      // 类型
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '类型： ${widget.typeName}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      // 介绍
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: Container(
-                          child: Text(
-                            widget.desText,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Divider(height: 1),
-              !isNotAuthor
-                  ? Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: VideoBanner(
-                        avatarUrl: widget.avatarUrl,
-                        rowTitle: widget.authorName,
-                        rowDes: widget.authorDes,
-                        slotChild: Container(),
+                  // 类型
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '类型： ${widget.typeName}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
                       ),
-                    )
-                  : Container(),
-              Divider(height: isNotAuthor ? 0 : 1),
-              Container(
-                child: Column(
-                  children: _itemList.map((e) {
-                    return VideoFactory(
-                      id: e!.data!.id!.toString(),
-                      playUrl: e.data!.playUrl!,
-                      title: e.data!.title!,
-                      typeName: e.data!.category!,
-                      desText: e.data!.description!,
-                      subTime: DateTime.fromMillisecondsSinceEpoch(
-                              e.data!.releaseTime!)
+                    ),
+                  ),
+                  // 介绍
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Text(
+                      widget.desText,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            !isNotAuthor
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: VideoBanner(
+                      avatarUrl: widget.avatarUrl,
+                      rowTitle: widget.authorName,
+                      rowDes: widget.authorDes,
+                      slotChild: Container(),
+                    ),
+                  )
+                : Container(),
+            Divider(height: isNotAuthor ? 0 : 1),
+            Column(
+              children: _itemList.map((e) {
+                return VideoFactory(
+                  id: e!.data!.id!.toString(),
+                  playUrl: e.data!.playUrl!,
+                  title: e.data!.title!,
+                  typeName: e.data!.category!,
+                  desText: e.data!.description!,
+                  subTime:
+                      DateTime.fromMillisecondsSinceEpoch(e.data!.releaseTime!)
                           .toString()
                           .substring(0, 19),
-                      avatarUrl:
-                          e.data!.author != null ? e.data!.author!.icon! : "",
-                      authorDes: e.data!.author != null
-                          ? e.data!.author!.description!
-                          : "",
-                      authorName:
-                          e.data!.author != null ? e.data!.author!.name! : "",
-                      videoPoster: e.data!.cover!.feed!,
-                      isPopCurRoute: true,
-                      routerPopEnter: () async {
-                        await player.stop();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.black12),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 100,
-                                child: FadeInImage(
-                                  placeholder:
-                                      AssetImage('images/movie-lazy.gif'),
-                                  image: NetworkImage(e.data!.cover!.feed!),
-                                  imageErrorBuilder: (context, obj, trace) {
-                                    return ImgState(
-                                      msg: "加载失败",
-                                      icon: Icons.broken_image,
-                                    );
-                                  },
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        e.data!.title!,
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        e.data!.description!,
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                  avatarUrl:
+                      e.data!.author != null ? e.data!.author!.icon! : "",
+                  authorDes: e.data!.author != null
+                      ? e.data!.author!.description!
+                      : "",
+                  authorName:
+                      e.data!.author != null ? e.data!.author!.name! : "",
+                  videoPoster: e.data!.cover!.feed!,
+                  isPopCurRoute: true,
+                  routerPopEnter: () async {
+                    await player.stop();
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black12),
                       ),
-                    );
-                  }).toList(),
-                ),
-              )
-            ],
-          ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            height: 100,
+                            child: FadeInImage(
+                              placeholder:
+                                  const AssetImage('images/movie-lazy.gif'),
+                              image: NetworkImage(e.data!.cover!.feed!),
+                              imageErrorBuilder: (context, obj, trace) {
+                                return ImgState(
+                                  msg: "加载失败",
+                                  icon: Icons.broken_image,
+                                );
+                              },
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    e.data!.title!,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    e.data!.description!,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            )
+          ],
         ),
       );
     } else if (stateCode == 2) {
@@ -409,7 +406,7 @@ class _VideoInfoState extends State<VideoInfo>
             });
             await _pullData();
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.new_releases,
             size: 100,
             color: Colors.red,

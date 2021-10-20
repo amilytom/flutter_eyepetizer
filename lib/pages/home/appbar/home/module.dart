@@ -1,11 +1,12 @@
+// ignore_for_file: avoid_print, must_call_super
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
 // request
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 // routes
 import 'package:flutter_eyepetizer/router/index.dart';
 // schema
@@ -14,15 +15,15 @@ import 'package:flutter_eyepetizer/utils/api.dart';
 // utils
 import 'package:flutter_eyepetizer/utils/toast.dart';
 // widget
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myButton.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppBarTabHome extends StatefulWidget {
-  AppBarTabHome({Key? key}) : super(key: key);
+  const AppBarTabHome({Key? key}) : super(key: key);
 
   @override
   _AppBarTabHomeState createState() => _AppBarTabHomeState();
@@ -38,9 +39,9 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
   String initPageUrl = Api.getFirstHomeData;
   String? nextPageUrl;
   bool isShowFloatBtn = false;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   AppBar _buildPulicAppBar() {
     return AppBar(
@@ -48,11 +49,11 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       leading: Container(),
       title: Container(
         alignment: Alignment.center,
-        child: Text("日报"),
+        child: const Text("日报"),
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
           onPressed: () {
             Get.toNamed(PageName.SEARCH);
           },
@@ -94,7 +95,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       });
       String errMsg = swiperResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar1 swiper， url: ${initPageUrl}");
+      print("发生错误，位置home bottomBar1 swiper， url: $initPageUrl");
       print(swiperResponse.exception);
     }
   }
@@ -118,7 +119,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       });
       String errMsg = itemResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar1 items， url: ${nextPageUrl}");
+      print("发生错误，位置home bottomBar1 items， url: $nextPageUrl");
     }
   }
 
@@ -161,8 +162,8 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
 
   Widget _headerSwiper() {
     return Padding(
-      padding: EdgeInsets.all(10),
-      child: Container(
+      padding: const EdgeInsets.all(10),
+      child: SizedBox(
         height: 220,
         child: Swiper(
           autoplay: true,
@@ -189,14 +190,14 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                   ? _swiperList[idx]!.data!.author!.name!
                   : "",
               videoPoster: posterUrl,
-              child: Container(
+              child: SizedBox(
                 height: 220,
                 child: Stack(
                   children: [
                     Positioned(
                       child: FadeInImage(
                         height: 220,
-                        placeholder: AssetImage('images/movie-lazy.gif'),
+                        placeholder: const AssetImage('images/movie-lazy.gif'),
                         image: NetworkImage(posterUrl),
                         imageErrorBuilder: (context, obj, trace) {
                           return ImgState(
@@ -211,13 +212,13 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                     Positioned(
                       child: Container(
                         height: 40,
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
+                        color: const Color.fromRGBO(0, 0, 0, 0.5),
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 10, right: 10),
+                          padding: const EdgeInsets.only(left: 10, right: 10),
                           child: Text(
                             videoTitle,
-                            style: TextStyle(
+                            style: const TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: Colors.white,
                             ),
@@ -234,7 +235,8 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
             );
           },
           itemCount: _swiperList.length,
-          pagination: SwiperPagination(margin: EdgeInsets.only(bottom: 45)),
+          pagination:
+              const SwiperPagination(margin: EdgeInsets.only(bottom: 45)),
         ),
       ),
     );
@@ -250,7 +252,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       // String authorName = _itemList[idx]!.data!.author!.name!;
       String videoPoster = _itemList[idx]!.data!.cover!.feed!;
       return Padding(
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Column(
           children: [
             VideoFactory(
@@ -273,7 +275,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                   ? _itemList[idx]!.data!.author!.name!
                   : "",
               videoPoster: videoPoster,
-              child: Container(
+              child: SizedBox(
                 height: 210,
                 child: Stack(
                   children: [
@@ -283,7 +285,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                       bottom: 0,
                       top: 0,
                       child: FadeInImage(
-                        placeholder: AssetImage('images/movie-lazy.gif'),
+                        placeholder: const AssetImage('images/movie-lazy.gif'),
                         image: NetworkImage(videoPoster),
                         imageErrorBuilder: (context, obj, trace) {
                           return ImgState(
@@ -301,7 +303,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                         height: 50,
                         width: 50,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromRGBO(0, 0, 0, 0.5),
                           borderRadius: BorderRadius.all(
                             Radius.circular(25),
@@ -309,7 +311,8 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                         ),
                         child: Text(
                           videoCategory,
-                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
                         ),
                       ),
                     ),
@@ -325,7 +328,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
               rowDes:
                   isNotExistAuthor ? "暂无" : _itemList[idx]!.data!.author!.name!,
               slotChild: MyIconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.share,
                   size: 30,
                   color: Colors.black54,
@@ -333,10 +336,10 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                 cb: () {},
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
-            Divider(
+            const Divider(
               height: 1,
               color: Colors.black12,
             ),
@@ -355,7 +358,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
     if (stateCode == 0) {
       return Scaffold(
         appBar: _buildPulicAppBar(),
-        body: MyLoading(message: "加载中"),
+        body: const MyLoading(message: "加载中"),
       );
     } else if (stateCode == 1) {
       return Scaffold(
@@ -365,11 +368,11 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                 onPressed: () {
                   _scrollController.animateTo(
                     .0,
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                     curve: Curves.ease,
                   );
                 },
-                child: Icon(Icons.arrow_upward),
+                child: const Icon(Icons.arrow_upward),
               )
             : null,
         body: SmartRefresher(
@@ -379,11 +382,11 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
             builder: (context, mode) {
               Widget? body;
               if (mode == LoadStatus.idle) {
-                body = Text("上拉加载");
+                body = const Text("上拉加载");
               } else if (mode == LoadStatus.loading) {
                 body = Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: const <Widget>[
                     SizedBox(
                       width: 30,
                       height: 30,
@@ -394,13 +397,13 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                   ],
                 );
               } else if (mode == LoadStatus.failed) {
-                body = Text("加载失败！点击重试！");
+                body = const Text("加载失败！点击重试！");
               } else if (mode == LoadStatus.canLoading) {
-                body = Text("松手,加载更多！");
+                body = const Text("松手,加载更多！");
               } else if (mode == LoadStatus.noMore) {
-                body = Text("没有更多数据了！");
+                body = const Text("没有更多数据了！");
               }
-              return Container(
+              return SizedBox(
                 height: 55.0,
                 child: Center(child: body),
               );
@@ -434,7 +437,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
             // 重新加载
             await _refresh();
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.new_releases,
             size: 100,
             color: Colors.red,

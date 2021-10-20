@@ -1,3 +1,4 @@
+// ignore_for_file: constant_identifier_names
 const String AppName = "Flutter仿开眼视频APP";
 // 部分接口使用uuid
 const String uuid = "3e7ee30c6fc0004a773dc33b0597b5732b145c04";

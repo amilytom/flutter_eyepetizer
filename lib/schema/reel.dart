@@ -37,7 +37,7 @@ class ReelItemListData {
     actionUrl = json["actionUrl"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["dataType"] = dataType;
     data["id"] = id;
     data["title"] = title;
@@ -84,11 +84,9 @@ class ReelItemList {
     adIndex = json["adIndex"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["type"] = type;
-    if (data != null) {
-      data["data"] = this.data!.toJson();
-    }
+    data["data"] = this.data!.toJson();
     data["id"] = id;
     data["adIndex"] = adIndex;
     return data;
@@ -148,13 +146,13 @@ class Reel {
     adExist = json["adExist"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (itemList != null) {
       final v = itemList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["itemList"] = arr0;
     }
     data["count"] = count;

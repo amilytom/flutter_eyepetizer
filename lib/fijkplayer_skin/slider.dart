@@ -1,5 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 /// FijkSlider is like Slider in Flutter SDK.
@@ -51,7 +51,7 @@ class _NewFijkSliderState extends State<NewFijkSlider> {
 
     return GestureDetector(
       child: Container(
-        margin: EdgeInsets.only(left: margin, right: margin),
+        margin: const EdgeInsets.only(left: margin, right: margin),
         height: double.infinity,
         width: double.infinity,
         color: Colors.transparent,

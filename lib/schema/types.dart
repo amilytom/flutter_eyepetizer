@@ -45,7 +45,7 @@ class TypesData {
     tagId = json["tagId"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["name"] = name;
     data["description"] = description;
@@ -83,19 +83,19 @@ class Types {
   });
   Types.fromJson(List<dynamic> data) {
     final arr0 = <TypesData>[];
-    data.forEach((v) {
+    for (var v in data) {
       arr0.add(TypesData.fromJson(v));
-    });
+    }
     this.data = arr0;
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       final v = this.data;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["data"] = arr0;
     }
     return data;

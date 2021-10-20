@@ -1,19 +1,20 @@
+// ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //
 import 'package:flutter_eyepetizer/router/index.dart';
 //
-import 'package:flutter_eyepetizer/service/videoHistory.dart';
+import 'package:flutter_eyepetizer/service/video_history.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/storage.dart';
 //
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // debugPaintSizeEnabled = true;
   await initStore();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 Future<void> initStore() async {
@@ -25,6 +26,7 @@ Future<void> initStore() async {
   );
   // 历史记录，全局
   await Get.putAsync(() => HistoryService().init());
+  // 全局注入
   print("全局注入");
 }
 

@@ -21,7 +21,7 @@ class FeedIssueListItemListDataWebUrl {
     forWeibo = json["forWeibo"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["raw"] = raw;
     data["forWeibo"] = forWeibo;
     return data;
@@ -56,7 +56,7 @@ class FeedIssueListItemListDataCover {
     homepage = json["homepage"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["feed"] = feed;
     data["detail"] = detail;
     data["blurred"] = blurred;
@@ -89,7 +89,7 @@ class FeedIssueListItemListDataAuthorShield {
     shielded = json["shielded"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["shielded"] = shielded;
@@ -121,7 +121,7 @@ class FeedIssueListItemListDataAuthorFollow {
     followed = json["followed"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["followed"] = followed;
@@ -205,7 +205,7 @@ class FeedIssueListItemListDataAuthor {
     expert = json["expert"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["icon"] = icon;
     data["name"] = name;
@@ -251,7 +251,7 @@ class FeedIssueListItemListDataProvider {
     icon = json["icon"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["name"] = name;
     data["alias"] = alias;
     data["icon"] = icon;
@@ -287,7 +287,7 @@ class FeedIssueListItemListDataConsumption {
     realCollectionCount = json["realCollectionCount"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["collectionCount"] = collectionCount;
     data["shareCount"] = shareCount;
     data["replyCount"] = replyCount;
@@ -465,7 +465,7 @@ class FeedIssueListItemListData {
     played = json["played"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["dataType"] = dataType;
     data["id"] = id;
     data["title"] = title;
@@ -604,11 +604,9 @@ class FeedIssueListItemList {
     adIndex = json["adIndex"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["type"] = type;
-    if (data != null) {
-      data["data"] = this.data!.toJson();
-    }
+    data["data"] = this.data!.toJson();
     data["id"] = id;
     data["adIndex"] = adIndex;
     return data;
@@ -735,7 +733,7 @@ class FeedIssueList {
     count = json["count"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["releaseTime"] = releaseTime;
     data["type"] = type;
     data["date"] = date;
@@ -743,9 +741,9 @@ class FeedIssueList {
     if (itemList != null) {
       final v = itemList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v.toJson());
-      });
+      }
       data["itemList"] = arr0;
     }
     data["count"] = count;
@@ -871,13 +869,13 @@ class Feed {
     newestIssueType = json["newestIssueType"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (issueList != null) {
       final v = issueList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["issueList"] = arr0;
     }
     data["nextPageUrl"] = nextPageUrl;

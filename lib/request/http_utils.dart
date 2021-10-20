@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_eyepetizer/request/httpRequest.dart';
+import 'package:flutter_eyepetizer/request/http_request.dart';
 import 'package:flutter_eyepetizer/request/interceptor/cache.dart';
 
 class HttpUtils {

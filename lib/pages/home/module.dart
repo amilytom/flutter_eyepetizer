@@ -10,7 +10,7 @@ import 'package:flutter_eyepetizer/pages/home/appbar/user/module.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -19,23 +19,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   DateTime? lastPopTime;
   int _curPage = 0;
-  TabStyle _tabStyle = TabStyle.reactCircle;
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
 
   // ignore: non_constant_identifier_names
-  List<Widget> _TabBarBodyItems = [
-    AppBarTabHome(),
-    AppBarTabExplore(),
-    AppBarTabPopular(),
-    AppBarTabUser(),
+  final List<Widget> _TabBarBodyItems = [
+    const AppBarTabHome(),
+    const AppBarTabExplore(),
+    const AppBarTabPopular(),
+    const AppBarTabUser(),
   ];
 
   // ignore: non_constant_identifier_names
-  List<TabItem<dynamic>> _TabBarItems = [
-    TabItem(icon: Icons.home, title: '首页'),
-    TabItem(icon: Icons.explore, title: '发现'),
-    TabItem(icon: Icons.local_fire_department, title: '热门'),
-    TabItem(icon: Icons.person, title: '我的'),
+  final List<TabItem<dynamic>> _TabBarItems = [
+    const TabItem(icon: Icons.home, title: '首页'),
+    const TabItem(icon: Icons.explore, title: '发现'),
+    const TabItem(icon: Icons.local_fire_department, title: '热门'),
+    const TabItem(icon: Icons.person, title: '我的'),
   ];
 
   @override
@@ -61,13 +60,14 @@ class _HomeState extends State<Home> {
         ),
         body: PageView(
           controller: _pageController,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           children: _TabBarBodyItems,
         ),
       ),
       onWillPop: () async {
         if (lastPopTime == null ||
-            DateTime.now().difference(lastPopTime!) > Duration(seconds: 2)) {
+            DateTime.now().difference(lastPopTime!) >
+                const Duration(seconds: 2)) {
           // 存储当前按下back键的时间
           lastPopTime = DateTime.now();
           // toast

@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:flutter/material.dart';
 
 class VideoBanner extends StatelessWidget {
@@ -17,29 +18,27 @@ class VideoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 60,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: Container(
               height: 50,
               width: 50,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
               child: ClipOval(
                 child: FadeInImage(
-                  placeholder: AssetImage('images/movie-lazy.gif'),
+                  placeholder: const AssetImage('images/movie-lazy.gif'),
                   image: isAssets
-                      ? AssetImage('images/author-default.jpg')
+                      ? const AssetImage('images/author-default.jpg')
                       : NetworkImage(avatarUrl) as ImageProvider,
                   imageErrorBuilder: (context, obj, trace) {
-                    return Container(
-                      child: Image.asset('images/author-default.jpg'),
-                    );
+                    return Image.asset('images/author-default.jpg');
                   },
                   fit: BoxFit.cover,
                 ),
@@ -51,35 +50,31 @@ class VideoBanner extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  child: Text(
-                    rowTitle,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                Text(
+                  rowTitle,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
-                Container(
-                  child: Text(
-                    rowDes,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                Text(
+                  rowDes,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10),
             child: slotChild,
           ),
         ],

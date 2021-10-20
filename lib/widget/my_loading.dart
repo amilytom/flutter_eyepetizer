@@ -14,11 +14,11 @@ class MyLoading extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 8),
+          const CircularProgressIndicator(),
+          const SizedBox(height: 8),
           Text(
             message ?? "加载中",
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
         ],
       ),

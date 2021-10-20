@@ -1,25 +1,26 @@
+// ignore_for_file: avoid_print, must_call_super
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 //
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 //
 import 'package:flutter_eyepetizer/schema/video_search.dart';
 //
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myButton.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class VideoSearchPage extends StatefulWidget {
-  VideoSearchPage({Key? key}) : super(key: key);
+  const VideoSearchPage({Key? key}) : super(key: key);
 
   @override
   _VideoSearchPageState createState() => _VideoSearchPageState();
@@ -31,10 +32,10 @@ class _VideoSearchPageState extends State<VideoSearchPage>
   String curSearchVal = "";
   bool? isInit;
   bool isShowFloatBtn = false;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  ScrollController _scrollController = ScrollController();
-  FocusNode _commentFocus = FocusNode();
+  final ScrollController _scrollController = ScrollController();
+  final FocusNode _commentFocus = FocusNode();
   String initPageUrl = Api.getSearchData;
   String nextPageUrl = Api.getSearchData;
   bool? isFocus;
@@ -42,7 +43,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
 
   Future<ApiResponse<VideoSearch>> getReelInfoData() async {
     try {
-      dynamic response = await HttpUtils.get('${nextPageUrl}${curSearchVal}');
+      dynamic response = await HttpUtils.get('$nextPageUrl$curSearchVal');
       print(response);
       VideoSearch data = VideoSearch.fromJson(response);
       return ApiResponse.completed(data);
@@ -80,7 +81,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
       });
       String errMsg = searchResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置search， url: ${nextPageUrl}${curSearchVal}");
+      print("发生错误，位置search， url: $nextPageUrl$curSearchVal");
     }
   }
 
@@ -127,10 +128,10 @@ class _VideoSearchPageState extends State<VideoSearchPage>
       titleSpacing: 0,
       elevation: 0,
       title: TextField(
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         focusNode: _commentFocus,
         cursorColor: Colors.white,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
           ),
@@ -154,7 +155,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
       ),
       actions: [
         MyIconButton(
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
           cb: () async {
             setState(() {
               stateCode = 0;
@@ -178,7 +179,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
     if (stateCode == 0) {
       body = Scaffold(
         appBar: _buildPublicAppBar(),
-        body: MyLoading(message: "加载中"),
+        body: const MyLoading(message: "加载中"),
       );
     } else if (stateCode == 1) {
       body = Scaffold(
@@ -187,10 +188,10 @@ class _VideoSearchPageState extends State<VideoSearchPage>
             ? FloatingActionButton(
                 onPressed: () {
                   _scrollController.animateTo(.0,
-                      duration: Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 200),
                       curve: Curves.ease);
                 },
-                child: Icon(Icons.arrow_upward),
+                child: const Icon(Icons.arrow_upward),
               )
             : null,
         body: SmartRefresher(
@@ -200,11 +201,11 @@ class _VideoSearchPageState extends State<VideoSearchPage>
             builder: (context, mode) {
               Widget? body;
               if (mode == LoadStatus.idle) {
-                body = Text("上拉加载");
+                body = const Text("上拉加载");
               } else if (mode == LoadStatus.loading) {
                 body = Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: const <Widget>[
                     SizedBox(
                       width: 30,
                       height: 30,
@@ -215,13 +216,13 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                   ],
                 );
               } else if (mode == LoadStatus.failed) {
-                body = Text("加载失败！点击重试！");
+                body = const Text("加载失败！点击重试！");
               } else if (mode == LoadStatus.canLoading) {
-                body = Text("松手,加载更多！");
+                body = const Text("松手,加载更多！");
               } else if (mode == LoadStatus.noMore) {
-                body = Text("没有更多数据了！");
+                body = const Text("没有更多数据了！");
               }
-              return Container(
+              return SizedBox(
                 height: 55.0,
                 child: Center(child: body),
               );
@@ -237,7 +238,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
               // String authorName = _itemList[idx]!.data!.author!.name!;
               String videoPoster = _itemList[idx]!.data!.cover!.feed!;
               return Padding(
-                padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: Column(
                   children: [
                     VideoFactory(
@@ -260,7 +261,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                           ? _itemList[idx]!.data!.author!.name!
                           : "",
                       videoPoster: videoPoster,
-                      child: Container(
+                      child: SizedBox(
                         height: 210,
                         child: Stack(
                           children: [
@@ -271,7 +272,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                               top: 0,
                               child: FadeInImage(
                                 placeholder:
-                                    AssetImage('images/movie-lazy.gif'),
+                                    const AssetImage('images/movie-lazy.gif'),
                                 image: NetworkImage(videoPoster),
                                 imageErrorBuilder: (context, obj, trace) {
                                   return ImgState(
@@ -289,7 +290,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                                 height: 50,
                                 width: 50,
                                 alignment: Alignment.center,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: Color.fromRGBO(0, 0, 0, 0.5),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(25),
@@ -297,7 +298,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                                 ),
                                 child: Text(
                                   videoCategory,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 12, color: Colors.white),
                                 ),
                               ),
@@ -316,7 +317,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                           ? "暂无"
                           : _itemList[idx]!.data!.author!.name!,
                       slotChild: MyIconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.share,
                           size: 30,
                           color: Colors.black54,
@@ -324,10 +325,10 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                         cb: () {},
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
-                    Divider(
+                    const Divider(
                       height: 1,
                       color: Colors.black12,
                     ),
@@ -349,7 +350,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
         appBar: _buildPublicAppBar(),
         body: MyState(
           cb: () async {},
-          icon: Icon(
+          icon: const Icon(
             Icons.new_releases,
             size: 100,
             color: Colors.red,
@@ -369,7 +370,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
             // 重新加载
             await _refresh();
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.pest_control,
             size: 100,
             color: Colors.red,

@@ -1,13 +1,14 @@
+// ignore_for_file: prefer_const_constructors_in_immutables, avoid_print
 import 'package:flutter/material.dart';
 // components
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 // glabel controller
-import 'package:flutter_eyepetizer/service/videoHistory.dart';
+import 'package:flutter_eyepetizer/service/video_history.dart';
 // widget
 import 'package:flutter_eyepetizer/utils/toast.dart';
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myButton.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_button.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 
 class VideoHistory extends StatelessWidget {
@@ -20,7 +21,7 @@ class VideoHistory extends StatelessWidget {
     List<Widget> _buildStoreVideoList() {
       return historyService.hisList.map((e) {
         return Padding(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 10),
           child: VideoFactory(
             id: e["id"]!,
             playUrl: e["playUrl"]!,
@@ -33,7 +34,7 @@ class VideoHistory extends StatelessWidget {
             typeName: e["typeName"]!,
             videoPoster: e["videoPoster"]!,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: Colors.black12),
                   top: BorderSide(color: Colors.black12),
@@ -42,11 +43,11 @@ class VideoHistory extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 150,
                     height: 100,
                     child: FadeInImage(
-                      placeholder: AssetImage('images/movie-lazy.gif'),
+                      placeholder: const AssetImage('images/movie-lazy.gif'),
                       image: NetworkImage(e["videoPoster"]),
                       imageErrorBuilder: (context, obj, trace) {
                         return ImgState(
@@ -59,7 +60,7 @@ class VideoHistory extends StatelessWidget {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,17 +68,17 @@ class VideoHistory extends StatelessWidget {
                           Text(
                             e["title"],
                             maxLines: 2,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          SizedBox(height: 2),
+                          const SizedBox(height: 2),
                           Text(
                             e["desText"],
                             maxLines: 2,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -97,10 +98,10 @@ class VideoHistory extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text("历史记录"),
+          title: const Text("历史记录"),
           actions: [
             MyIconButton(
-              icon: Icon(Icons.restore_from_trash),
+              icon: const Icon(Icons.restore_from_trash),
               cb: () {
                 historyService.removeKey("history").then((res) {
                   publicToast("删除成功");
@@ -113,10 +114,10 @@ class VideoHistory extends StatelessWidget {
             ),
           ],
         ),
-        body: historyService.hisList.length > 0
+        body: historyService.hisList.isNotEmpty
             ? SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 10,
                     right: 10,
                     top: 10,
@@ -130,7 +131,7 @@ class VideoHistory extends StatelessWidget {
                 cb: () {
                   Get.back();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.new_releases,
                   size: 100,
                   color: Colors.red,

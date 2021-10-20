@@ -21,7 +21,7 @@ class FollowItemListDataItemListDataWebUrl {
     forWeibo = json["forWeibo"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["raw"] = raw;
     data["forWeibo"] = forWeibo;
     return data;
@@ -52,7 +52,7 @@ class FollowItemListDataItemListDataCover {
     blurred = json["blurred"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["feed"] = feed;
     data["detail"] = detail;
     data["blurred"] = blurred;
@@ -85,7 +85,7 @@ class FollowItemListDataItemListDataAuthorShield {
     shielded = json["shielded"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["shielded"] = shielded;
@@ -118,7 +118,7 @@ class FollowItemListDataItemListDataAuthorFollow {
     followed = json["followed"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["followed"] = followed;
@@ -202,7 +202,7 @@ class FollowItemListDataItemListDataAuthor {
     expert = json["expert"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["icon"] = icon;
     data["name"] = name;
@@ -253,7 +253,7 @@ class FollowItemListDataItemListDataConsumption {
     realCollectionCount = json["realCollectionCount"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["collectionCount"] = collectionCount;
     data["shareCount"] = shareCount;
     data["replyCount"] = replyCount;
@@ -314,7 +314,7 @@ class FollowItemListDataItemListDataTags {
     communityIndex = json["communityIndex"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["name"] = name;
     data["actionUrl"] = actionUrl;
@@ -516,7 +516,7 @@ class FollowItemListDataItemListData {
     played = json["played"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["dataType"] = dataType;
     data["id"] = id;
     data["title"] = title;
@@ -525,9 +525,9 @@ class FollowItemListDataItemListData {
     if (tags != null) {
       final v = tags;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["tags"] = arr0;
     }
     if (consumption != null) {
@@ -670,11 +670,9 @@ class FollowItemListDataItemList {
     adIndex = json["adIndex"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["type"] = type;
-    if (data != null) {
-      data["data"] = this.data!.toJson();
-    }
+    data["data"] = this.data!.toJson();
     data["id"] = id;
     data["adIndex"] = adIndex;
     return data;
@@ -705,7 +703,7 @@ class FollowItemListDataHeaderFollow {
     followed = json["followed"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["followed"] = followed;
@@ -775,7 +773,7 @@ class FollowItemListDataHeader {
     expert = json["expert"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["icon"] = icon;
     data["iconType"] = iconType;
@@ -932,7 +930,7 @@ class FollowItemListData {
     count = json["count"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["dataType"] = dataType;
     if (header != null) {
       data["header"] = header!.toJson();
@@ -940,9 +938,9 @@ class FollowItemListData {
     if (itemList != null) {
       final v = itemList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["itemList"] = arr0;
     }
     data["count"] = count;
@@ -1084,11 +1082,9 @@ class FollowItemList {
     adIndex = json["adIndex"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["type"] = type;
-    if (data != null) {
-      data["data"] = this.data!.toJson();
-    }
+    data["data"] = this.data!.toJson();
     data["id"] = id;
     data["adIndex"] = adIndex;
     return data;
@@ -1255,13 +1251,13 @@ class Follow {
     lastStartId = json["lastStartId"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (itemList != null) {
       final v = itemList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["itemList"] = arr0;
     }
     data["count"] = count;

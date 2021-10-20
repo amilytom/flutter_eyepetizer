@@ -1,25 +1,26 @@
+// ignore_for_file: avoid_print, must_call_super, must_be_immutable
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_eyepetizer/components/videoBanner.dart';
-import 'package:flutter_eyepetizer/components/videoFactory.dart';
+import 'package:flutter_eyepetizer/components/video_banner.dart';
+import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
-import 'package:flutter_eyepetizer/request/apiResponse.dart';
-import 'package:flutter_eyepetizer/request/httpUtils.dart';
+import 'package:flutter_eyepetizer/request/api_response.dart';
+import 'package:flutter_eyepetizer/request/http_utils.dart';
 //
 import 'package:flutter_eyepetizer/schema/reel_info.dart';
 //
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/imgState.dart';
-import 'package:flutter_eyepetizer/widget/myLoading.dart';
-import 'package:flutter_eyepetizer/widget/myState.dart';
+import 'package:flutter_eyepetizer/widget/img_state.dart';
+import 'package:flutter_eyepetizer/widget/my_loading.dart';
+import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 
 class ReelDetaill extends StatefulWidget {
-  ReelDetaill({Key? key}) : super(key: key);
+  const ReelDetaill({Key? key}) : super(key: key);
 
   @override
   _ReelDetaillState createState() => _ReelDetaillState();
@@ -62,7 +63,7 @@ class _ReelDetaillState extends State<ReelDetaill>
       });
       String errMsg = reelInfoResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置reel_detaill， url: ${initPageUrl}");
+      print("发生错误，位置reel_detaill， url: $initPageUrl");
     }
   }
 
@@ -76,7 +77,7 @@ class _ReelDetaillState extends State<ReelDetaill>
   Widget build(BuildContext context) {
     Widget bodyView;
     if (stateCode == 0) {
-      bodyView = MyLoading(message: "加载中");
+      bodyView = const MyLoading(message: "加载中");
     } else if (stateCode == 1) {
       bodyView = SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -102,7 +103,7 @@ class _ReelDetaillState extends State<ReelDetaill>
           // 重新加载
           await _pullData();
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.new_releases,
           size: 100,
           color: Colors.red,
@@ -144,7 +145,7 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 300,
       child: Stack(
         children: [
@@ -152,10 +153,10 @@ class Header extends StatelessWidget {
             left: 0,
             right: 0,
             top: 0,
-            child: Container(
+            child: SizedBox(
               height: 260,
               child: FadeInImage(
-                placeholder: AssetImage('images/movie-lazy.gif'),
+                placeholder: const AssetImage('images/movie-lazy.gif'),
                 image: NetworkImage(bgImg!),
                 imageErrorBuilder: (context, obj, trace) {
                   return ImgState(
@@ -177,30 +178,30 @@ class Header extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
-                    offset: Offset(0.0, 0.0),
+                    offset: const Offset(0.0, 0.0),
                     blurRadius: 10,
                     spreadRadius: 8,
                   ),
                 ],
               ),
               child: Padding(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
                     // title
                     Container(
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         border: Border(
                           bottom: BorderSide(color: Colors.black12),
                         ),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
                           title!,
                           maxLines: 1,
-                          style: TextStyle(
+                          style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -210,18 +211,16 @@ class Header extends StatelessWidget {
                       ),
                     ),
                     // des
-                    Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          desText!,
-                          maxLines: 3,
-                          style: TextStyle(
-                            fontSize: 12,
-                            overflow: TextOverflow.ellipsis,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        desText!,
+                        maxLines: 3,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          overflow: TextOverflow.ellipsis,
+                          color: Colors.black45,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -242,11 +241,11 @@ class CollList extends StatelessWidget {
 
   Widget _buildContextWidget() {
     if (children!.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             Icon(
               Icons.new_releases,
               size: 60,
@@ -264,11 +263,11 @@ class CollList extends StatelessWidget {
           children: children!.map((e) {
             String videoPoster = e!.data!.content!.data!.cover!.feed!;
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: Colors.black12)),
               ),
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
                     VideoBanner(
@@ -284,7 +283,7 @@ class CollList extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         e.data!.content!.data!.title!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -296,14 +295,14 @@ class CollList extends StatelessWidget {
                       child: Text(
                         e.data!.content!.data!.descriptionEditor!,
                         maxLines: 3,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black38,
                           fontSize: 14,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     VideoFactory(
                       id: e.id!.toString(),
                       playUrl: e.data!.content!.data!.playUrl!,
@@ -324,10 +323,11 @@ class CollList extends StatelessWidget {
                           ? e.data!.content!.data!.author!.name!
                           : "",
                       videoPoster: videoPoster,
-                      child: Container(
+                      child: SizedBox(
                         height: 210,
                         child: FadeInImage(
-                          placeholder: AssetImage('images/movie-lazy.gif'),
+                          placeholder:
+                              const AssetImage('images/movie-lazy.gif'),
                           image: NetworkImage(videoPoster),
                           imageErrorBuilder: (context, obj, trace) {
                             return ImgState(

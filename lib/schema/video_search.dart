@@ -25,7 +25,7 @@ class VideoSearchItemListDataPlayInfoUrlList {
     size = json["size"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["name"] = name;
     data["url"] = url;
     data["size"] = size;
@@ -82,15 +82,15 @@ class VideoSearchItemListDataPlayInfo {
     url = json["url"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["height"] = height;
     data["width"] = width;
     if (urlList != null) {
       final v = urlList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["urlList"] = arr0;
     }
     data["name"] = name;
@@ -120,7 +120,7 @@ class VideoSearchItemListDataWebUrl {
     forWeibo = json["forWeibo"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["raw"] = raw;
     data["forWeibo"] = forWeibo;
     return data;
@@ -155,7 +155,7 @@ class VideoSearchItemListDataCover {
     homepage = json["homepage"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["feed"] = feed;
     data["detail"] = detail;
     data["blurred"] = blurred;
@@ -188,7 +188,7 @@ class VideoSearchItemListDataAuthorShield {
     shielded = json["shielded"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["shielded"] = shielded;
@@ -220,7 +220,7 @@ class VideoSearchItemListDataAuthorFollow {
     followed = json["followed"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["itemType"] = itemType;
     data["itemId"] = itemId;
     data["followed"] = followed;
@@ -304,7 +304,7 @@ class VideoSearchItemListDataAuthor {
     expert = json["expert"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["icon"] = icon;
     data["name"] = name;
@@ -350,7 +350,7 @@ class VideoSearchItemListDataProvider {
     icon = json["icon"]?.toString();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["name"] = name;
     data["alias"] = alias;
     data["icon"] = icon;
@@ -386,7 +386,7 @@ class VideoSearchItemListDataConsumption {
     realCollectionCount = json["realCollectionCount"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["collectionCount"] = collectionCount;
     data["shareCount"] = shareCount;
     data["replyCount"] = replyCount;
@@ -582,7 +582,7 @@ class VideoSearchItemListData {
     played = json["played"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["dataType"] = dataType;
     data["id"] = id;
     data["title"] = title;
@@ -611,9 +611,9 @@ class VideoSearchItemListData {
     if (playInfo != null) {
       final v = playInfo;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["playInfo"] = arr0;
     }
     data["ad"] = ad;
@@ -741,11 +741,9 @@ class VideoSearchItemList {
     adIndex = json["adIndex"]?.toInt();
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data["type"] = type;
-    if (data != null) {
-      data["data"] = this.data!.toJson();
-    }
+    data["data"] = this.data!.toJson();
     data["id"] = id;
     data["adIndex"] = adIndex;
     return data;
@@ -881,13 +879,13 @@ class VideoSearch {
     adExist = json["adExist"];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (itemList != null) {
       final v = itemList;
       final arr0 = [];
-      v!.forEach((v) {
+      for (var v in v!) {
         arr0.add(v!.toJson());
-      });
+      }
       data["itemList"] = arr0;
     }
     data["count"] = count;

@@ -7,10 +7,10 @@ class UserDeclare extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('免责申明'),
+        title: const Text('免责申明'),
       ),
       body: ListView(
-        children: <Widget>[
+        children: const <Widget>[
           Padding(
             padding: EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 0),
             child: Text(
