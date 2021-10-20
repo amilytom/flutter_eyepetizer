@@ -313,9 +313,11 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               elevation: MaterialStateProperty.all(0),
               backgroundColor: MaterialStateProperty.all(Colors.white),
             ),
-            onPressed: () async {
+            onPressed: () {
               // 切换视频
-              await player.setDataSource(curPlayUrl, autoPlay: true);
+              setState(() {
+                player.setDataSource(curPlayUrl, autoPlay: true);
+              });
             },
             child: const Text(
               "点击重试",
