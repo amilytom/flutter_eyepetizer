@@ -197,6 +197,8 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                     Positioned(
                       child: FadeInImage(
                         height: 220,
+                        fadeOutDuration: const Duration(milliseconds: 50),
+                        fadeInDuration: const Duration(milliseconds: 50),
                         placeholder: const AssetImage('images/movie-lazy.gif'),
                         image: NetworkImage(posterUrl),
                         imageErrorBuilder: (context, obj, trace) {
@@ -285,6 +287,8 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                       bottom: 0,
                       top: 0,
                       child: FadeInImage(
+                        fadeOutDuration: const Duration(milliseconds: 50),
+                        fadeInDuration: const Duration(milliseconds: 50),
                         placeholder: const AssetImage('images/movie-lazy.gif'),
                         image: NetworkImage(videoPoster),
                         imageErrorBuilder: (context, obj, trace) {

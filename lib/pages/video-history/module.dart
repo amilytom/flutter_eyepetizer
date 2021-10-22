@@ -47,6 +47,8 @@ class VideoHistory extends StatelessWidget {
                     width: 150,
                     height: 100,
                     child: FadeInImage(
+                      fadeOutDuration: const Duration(milliseconds: 50),
+                      fadeInDuration: const Duration(milliseconds: 50),
                       placeholder: const AssetImage('images/movie-lazy.gif'),
                       image: NetworkImage(e["videoPoster"]),
                       imageErrorBuilder: (context, obj, trace) {

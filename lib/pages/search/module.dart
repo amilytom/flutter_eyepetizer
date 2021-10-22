@@ -271,6 +271,10 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                               bottom: 0,
                               top: 0,
                               child: FadeInImage(
+                                fadeOutDuration:
+                                    const Duration(milliseconds: 50),
+                                fadeInDuration:
+                                    const Duration(milliseconds: 50),
                                 placeholder:
                                     const AssetImage('images/movie-lazy.gif'),
                                 image: NetworkImage(videoPoster),

@@ -156,6 +156,8 @@ class Header extends StatelessWidget {
             child: SizedBox(
               height: 260,
               child: FadeInImage(
+                fadeOutDuration: const Duration(milliseconds: 50),
+                fadeInDuration: const Duration(milliseconds: 50),
                 placeholder: const AssetImage('images/movie-lazy.gif'),
                 image: NetworkImage(bgImg!),
                 imageErrorBuilder: (context, obj, trace) {
@@ -326,6 +328,8 @@ class CollList extends StatelessWidget {
                       child: SizedBox(
                         height: 210,
                         child: FadeInImage(
+                          fadeOutDuration: const Duration(milliseconds: 50),
+                          fadeInDuration: const Duration(milliseconds: 50),
                           placeholder:
                               const AssetImage('images/movie-lazy.gif'),
                           image: NetworkImage(videoPoster),

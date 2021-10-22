@@ -186,6 +186,10 @@ class _TypeDetaillState extends State<TypeDetaill>
                               bottom: 0,
                               top: 0,
                               child: FadeInImage(
+                                fadeOutDuration:
+                                    const Duration(milliseconds: 50),
+                                fadeInDuration:
+                                    const Duration(milliseconds: 50),
                                 placeholder:
                                     const AssetImage('images/movie-lazy.gif'),
                                 image: NetworkImage(videoPoster),

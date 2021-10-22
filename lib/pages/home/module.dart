@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   DateTime? lastPopTime;
   int _curPage = 0;
   final PageController _pageController = PageController(initialPage: 0);
@@ -82,4 +82,7 @@ class _HomeState extends State<Home> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

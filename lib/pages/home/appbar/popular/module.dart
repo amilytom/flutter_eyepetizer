@@ -265,6 +265,8 @@ class _TabBarItemCartState extends State<TabBarItemCart>
                             bottom: 0,
                             top: 0,
                             child: FadeInImage(
+                              fadeOutDuration: const Duration(milliseconds: 50),
+                              fadeInDuration: const Duration(milliseconds: 50),
                               placeholder: AssetImage('images/movie-lazy.gif'),
                               image: NetworkImage(videoPoster),
                               imageErrorBuilder: (context, obj, trace) {

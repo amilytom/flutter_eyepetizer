@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //
@@ -10,8 +11,21 @@ import 'package:flutter_eyepetizer/utils/storage.dart';
 //
 import 'package:flutter_eyepetizer/request/http_utils.dart';
 
+class CustomImageCache extends WidgetsFlutterBinding {
+  @override
+  ImageCache createImageCache() {
+    ImageCache imageCache = super.createImageCache();
+    imageCache.maximumSize = 5000;
+    imageCache.maximumSizeBytes = 1024 * 1024 * 2000; // 100 MB
+    return imageCache;
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kReleaseMode) {
+    CustomImageCache();
+  }
   // debugPaintSizeEnabled = true;
   await initStore();
   runApp(const MyApp());

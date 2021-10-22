@@ -33,6 +33,8 @@ class VideoBanner extends StatelessWidget {
               ),
               child: ClipOval(
                 child: FadeInImage(
+                  fadeOutDuration: const Duration(milliseconds: 50),
+                  fadeInDuration: const Duration(milliseconds: 50),
                   placeholder: const AssetImage('images/movie-lazy.gif'),
                   image: isAssets
                       ? const AssetImage('images/author-default.jpg')

@@ -278,6 +278,10 @@ class FollowTabState extends State<FollowTab>
                                 bottom: 0,
                                 top: 0,
                                 child: FadeInImage(
+                                  fadeOutDuration:
+                                      const Duration(milliseconds: 50),
+                                  fadeInDuration:
+                                      const Duration(milliseconds: 50),
                                   placeholder:
                                       const AssetImage('images/movie-lazy.gif'),
                                   image: NetworkImage(curVideoItemPoster),
@@ -535,6 +539,8 @@ class _TypesTabState extends State<TypesTab>
                     top: 0,
                     child: FadeInImage(
                       height: 220,
+                      fadeOutDuration: const Duration(milliseconds: 50),
+                      fadeInDuration: const Duration(milliseconds: 50),
                       placeholder: const AssetImage('images/movie-lazy.gif'),
                       image: NetworkImage(posterUrl),
                       imageErrorBuilder: (context, obj, trace) {
@@ -779,6 +785,8 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                   child: SizedBox(
                     height: 210,
                     child: FadeInImage(
+                      fadeOutDuration: const Duration(milliseconds: 50),
+                      fadeInDuration: const Duration(milliseconds: 50),
                       placeholder: const AssetImage('images/movie-lazy.gif'),
                       image: NetworkImage(curReelItemPoster),
                       imageErrorBuilder: (context, obj, trace) {
