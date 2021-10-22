@@ -1,3 +1,4 @@
+// ignore_for_file: must_call_super, non_constant_identifier_names
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   int _curPage = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
-  // ignore: non_constant_identifier_names
   final List<Widget> _TabBarBodyItems = [
     const AppBarTabHome(),
     const AppBarTabExplore(),
@@ -29,7 +29,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     const AppBarTabUser(),
   ];
 
-  // ignore: non_constant_identifier_names
   final List<TabItem<dynamic>> _TabBarItems = [
     const TabItem(icon: Icons.home, title: '首页'),
     const TabItem(icon: Icons.explore, title: '发现'),
