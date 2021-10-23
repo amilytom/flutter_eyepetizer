@@ -51,7 +51,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       "icon": Icons.share,
       "icoColor": Colors.green[800],
       "cb": () {
-        ShareExtend.share(AppName, "text");
+        ShareExtend.share(appName, "text");
       },
     },
     {

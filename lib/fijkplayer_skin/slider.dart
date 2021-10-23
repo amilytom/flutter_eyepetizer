@@ -74,19 +74,13 @@ class _NewFijkSliderState extends State<NewFijkSlider> {
         dragValue = (dx - margin) / (box.size.width - 2 * margin);
         dragValue = max(0, min(1, dragValue));
         dragValue = dragValue * (widget.max - widget.min) + widget.min;
-        // ignore: unnecessary_null_comparison
-        if (widget.onChanged != null) {
-          widget.onChanged(dragValue);
-        }
+        widget.onChanged(dragValue);
       },
       onHorizontalDragEnd: (DragEndDetails details) {
         setState(() {
           dragging = false;
         });
-        // ignore: unnecessary_null_comparison
-        if (widget.onChangeEnd != null) {
-          widget.onChangeEnd(dragValue);
-        }
+        widget.onChangeEnd(dragValue);
       },
     );
   }
