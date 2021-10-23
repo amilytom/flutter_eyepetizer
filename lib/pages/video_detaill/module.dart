@@ -47,7 +47,7 @@ class VideoDetaill extends StatefulWidget {
 class _VideoDetaillState extends State<VideoDetaill>
     with AutomaticKeepAliveClientMixin {
   FijkPlayer player = FijkPlayer();
-  ShowConfigAbs v_cfg = PlayerShowConfig();
+  ShowConfigAbs vSkinCfg = PlayerShowConfig();
   //
   bool isShowPlayer = false;
   //
@@ -129,7 +129,7 @@ class _VideoDetaillState extends State<VideoDetaill>
                         viewSize: viewSize,
                         texturePos: texturePos,
                         pageContent: context,
-                        showConfig: v_cfg,
+                        showConfig: vSkinCfg,
                         curPlayUrl: curPlayUrl,
                       );
                     },
