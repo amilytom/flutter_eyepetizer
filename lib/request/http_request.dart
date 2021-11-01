@@ -57,8 +57,8 @@ class Http {
   /// [interceptors] 基础拦截器
   void init({
     String? baseUrl,
-    int connectTimeout = 1500,
-    int receiveTimeout = 1500,
+    int connectTimeout = 15000,
+    int receiveTimeout = 15000,
     Map<String, String>? headers,
     List<Interceptor>? interceptors,
   }) {

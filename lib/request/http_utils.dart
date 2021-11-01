@@ -5,8 +5,8 @@ import 'package:flutter_eyepetizer/request/interceptor/cache.dart';
 class HttpUtils {
   static void init({
     required String baseUrl,
-    int connectTimeout = 1500,
-    int receiveTimeout = 1500,
+    int connectTimeout = 15000,
+    int receiveTimeout = 15000,
     List<Interceptor>? interceptors,
   }) {
     Http().init(
