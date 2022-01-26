@@ -11,21 +11,8 @@ import 'package:flutter_eyepetizer/utils/storage.dart';
 //
 import 'package:flutter_eyepetizer/request/http_utils.dart';
 
-class CustomImageCache extends WidgetsFlutterBinding {
-  @override
-  ImageCache createImageCache() {
-    ImageCache imageCache = super.createImageCache();
-    imageCache.maximumSize = 10000;
-    imageCache.maximumSizeBytes = 10737418240;
-    return imageCache;
-  }
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kReleaseMode) {
-    CustomImageCache();
-  }
   // debugPaintSizeEnabled = true;
   await initStore();
   runApp(const MyApp());

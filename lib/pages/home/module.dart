@@ -1,10 +1,10 @@
 // ignore_for_file: must_call_super, non_constant_identifier_names
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_eyepetizer/pages/home/appbar/explore/module.dart';
 // appbar view
 import 'package:flutter_eyepetizer/pages/home/appbar/home/module.dart';
+import 'package:flutter_eyepetizer/pages/home/appbar/explore/module.dart';
 import 'package:flutter_eyepetizer/pages/home/appbar/popular/module.dart';
 import 'package:flutter_eyepetizer/pages/home/appbar/user/module.dart';
 // utils
@@ -20,20 +20,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   DateTime? lastPopTime;
   int _curPage = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  final _pageController = PageController(initialPage: 0);
 
   final List<Widget> _TabBarBodyItems = [
     const AppBarTabHome(),
     const AppBarTabExplore(),
     const AppBarTabPopular(),
     const AppBarTabUser(),
-  ];
-
-  final List<TabItem<dynamic>> _TabBarItems = [
-    const TabItem(icon: Icons.home, title: '首页'),
-    const TabItem(icon: Icons.explore, title: '发现'),
-    const TabItem(icon: Icons.local_fire_department, title: '热门'),
-    const TabItem(icon: Icons.person, title: '我的'),
   ];
 
   @override
@@ -45,17 +38,36 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        bottomNavigationBar: ConvexAppBar(
-          height: 60,
-          color: Colors.white,
-          items: _TabBarItems,
-          initialActiveIndex: _curPage, //optional, default as 0
-          onTap: (int i) {
-            setState(() {
-              _curPage = i;
-            });
-            _pageController.jumpToPage(i);
+        bottomNavigationBar: BottomBar(
+          selectedIndex: _curPage,
+          onTap: (int index) {
+            _pageController.jumpToPage(index);
+            setState(() => _curPage = index);
           },
+          items: <BottomBarItem>[
+            BottomBarItem(
+              icon: const Icon(Icons.home),
+              title: const Text('首页'),
+              activeColor: Colors.blue,
+            ),
+            BottomBarItem(
+              icon: const Icon(Icons.explore),
+              title: const Text('发现'),
+              activeColor: Colors.red,
+              darkActiveColor: Colors.red.shade400, // Optional
+            ),
+            BottomBarItem(
+              icon: const Icon(Icons.local_fire_department),
+              title: const Text('热门'),
+              activeColor: Colors.greenAccent.shade700,
+              darkActiveColor: Colors.greenAccent.shade400, // Optional
+            ),
+            BottomBarItem(
+              icon: const Icon(Icons.person),
+              title: const Text('我的'),
+              activeColor: Colors.orange,
+            ),
+          ],
         ),
         body: PageView(
           controller: _pageController,

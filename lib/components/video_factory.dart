@@ -42,8 +42,8 @@ class VideoFactory extends StatelessWidget {
           await routerPopEnter!();
           Get.back();
         }
-        Get.toNamed(
-          PageName.VIDEO_DETAILL,
+        PageRoutes.addRouter(
+          routeName: PageName.VIDEO_DETAILL,
           parameters: {
             "id": id,
             "playUrl": playUrl,

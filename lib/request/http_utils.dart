@@ -17,10 +17,6 @@ class HttpUtils {
     );
   }
 
-  static void cancelRequests({required CancelToken token}) {
-    Http().cancelRequests(token: token);
-  }
-
   static Future get(
     String path, {
     Map<String, dynamic>? params,

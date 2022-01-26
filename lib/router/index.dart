@@ -12,6 +12,7 @@ import 'package:flutter_eyepetizer/pages/video-history/module.dart'
     show VideoHistory;
 import 'package:flutter_eyepetizer/pages/video_detaill/module.dart'
     show VideoDetaill;
+import 'package:flutter_eyepetizer/request/http_request.dart';
 import 'package:get/get.dart';
 
 class PageName {
@@ -56,4 +57,16 @@ class PageRoutes {
       page: () => VideoHistory(),
     ),
   ];
+  static addRouter({
+    required String routeName,
+    Map<String, String>? parameters,
+  }) async {
+    // 先清除所有的dio cancel
+    Http().cancelRequests();
+    // 再router入栈
+    Get.toNamed(
+      routeName,
+      parameters: parameters,
+    );
+  }
 }

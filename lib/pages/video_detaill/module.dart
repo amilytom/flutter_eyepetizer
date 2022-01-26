@@ -1,13 +1,15 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, must_call_super, non_constant_identifier_names, avoid_print
+import 'dart:async';
+import 'dart:ui';
+//
 import 'package:dio/dio.dart';
-import 'package:fijkplayer/fijkplayer.dart';
+import 'package:better_video_player/better_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
-import 'package:flutter_eyepetizer/fijkplayer_skin/fijkplayer_skin.dart';
 //
 import 'package:flutter_eyepetizer/request/api_response.dart';
 import 'package:flutter_eyepetizer/request/http_utils.dart';
@@ -24,19 +26,6 @@ import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 
-class PlayerShowConfig implements ShowConfigAbs {
-  @override
-  bool speedBtn = true;
-  @override
-  bool topBar = true;
-  @override
-  bool lockBtn = true;
-  @override
-  bool bottomPro = true;
-  @override
-  bool stateAuto = true;
-}
-
 class VideoDetaill extends StatefulWidget {
   const VideoDetaill({Key? key}) : super(key: key);
 
@@ -46,8 +35,8 @@ class VideoDetaill extends StatefulWidget {
 
 class _VideoDetaillState extends State<VideoDetaill>
     with AutomaticKeepAliveClientMixin {
-  FijkPlayer player = FijkPlayer();
-  ShowConfigAbs vSkinCfg = PlayerShowConfig();
+  final BetterVideoPlayerController controller = BetterVideoPlayerController();
+  late StreamSubscription playerEventSubscription;
   //
   bool isShowPlayer = false;
   //
@@ -70,18 +59,9 @@ class _VideoDetaillState extends State<VideoDetaill>
   void initState() {
     super.initState();
     // 设置播放源
-    Future.delayed(
-      const Duration(milliseconds: 400),
-      () {
-        setState(() {
-          isShowPlayer = true;
-        });
-        player.setDataSource(
-          curPlayUrl,
-          autoPlay: true,
-        );
-      },
-    );
+    playerEventSubscription = controller.playerEventStream.listen((event) {
+      print("wang $event");
+    });
     // 加入历史记录
     historyService.add(
       id: videoId,
@@ -95,11 +75,23 @@ class _VideoDetaillState extends State<VideoDetaill>
       authorName: authorName,
       videoPoster: videoPoster,
     );
+    // if (Platform.isAndroid) {
+    //   //设置Android头部的导航栏透明
+    //   SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.black, //全局设置透明
+    //     statusBarIconBrightness: Brightness.light,
+    //     //light:黑色图标 dark：白色图标
+    //     //在此处设置statusBarIconBrightness为全局设置
+    //   );
+    //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    // }
   }
 
   @override
   void dispose() {
-    player.dispose();
+    controller.pause();
+    controller.dispose();
+    playerEventSubscription.cancel();
     super.dispose();
   }
 
@@ -108,36 +100,28 @@ class _VideoDetaillState extends State<VideoDetaill>
     return Scaffold(
       body: Column(
         children: [
+          Container(
+            height: MediaQueryData.fromWindow(window).padding.top,
+            color: Colors.black,
+          ),
           Hero(
             tag: videoId,
-            child: isShowPlayer
-                ? FijkView(
-                    height: 260,
-                    color: Colors.black,
-                    fit: FijkFit.cover,
-                    player: player,
-                    panelBuilder: (
-                      FijkPlayer player,
-                      FijkData data,
-                      BuildContext context,
-                      Size viewSize,
-                      Rect texturePos,
-                    ) {
-                      /// 使用自定义的布局
-                      return CustomFijkPanel(
-                        player: player,
-                        viewSize: viewSize,
-                        texturePos: texturePos,
-                        pageContent: context,
-                        showConfig: vSkinCfg,
-                        curPlayUrl: curPlayUrl,
-                      );
-                    },
-                  )
-                : Container(
-                    height: 260,
-                    color: Colors.black,
+            child: AspectRatio(
+              aspectRatio: 16.0 / 9.0,
+              child: BetterVideoPlayer(
+                controller: controller,
+                configuration: BetterVideoPlayerConfiguration(
+                  placeholder: Image.network(
+                    videoPoster,
+                    fit: BoxFit.contain,
                   ),
+                ),
+                dataSource: BetterVideoPlayerDataSource(
+                  BetterVideoPlayerDataSourceType.network,
+                  curPlayUrl,
+                ),
+              ),
+            ),
           ),
           VideoInfo(
             id: videoId,
@@ -149,7 +133,7 @@ class _VideoDetaillState extends State<VideoDetaill>
             authorDes: authorDes,
             authorName: authorName,
             isNotAuthor: isNotAuthor,
-            player: player,
+            player: controller,
           ),
         ],
       ),
@@ -170,7 +154,7 @@ class VideoInfo extends StatefulWidget {
   final String authorName;
   final String authorDes;
   final bool isNotAuthor;
-  final FijkPlayer player;
+  final BetterVideoPlayerController player;
   const VideoInfo({
     Key? key,
     required this.id,
@@ -193,7 +177,7 @@ class _VideoInfoState extends State<VideoInfo>
     with AutomaticKeepAliveClientMixin {
   String get id => widget.id;
   bool get isNotAuthor => widget.isNotAuthor;
-  FijkPlayer get player => widget.player;
+  BetterVideoPlayerController get player => widget.player;
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
   String nextPageUrl = Api.getRelatedData;
@@ -329,7 +313,7 @@ class _VideoInfoState extends State<VideoInfo>
                   videoPoster: e.data!.cover!.feed!,
                   isPopCurRoute: true,
                   routerPopEnter: () async {
-                    await player.stop();
+                    await player.pause();
                   },
                   child: Container(
                     decoration: const BoxDecoration(

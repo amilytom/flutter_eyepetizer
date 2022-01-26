@@ -11,7 +11,8 @@ class Http {
   factory Http() => _instance;
 
   static late final Dio dio;
-  final CancelToken _cancelToken = CancelToken();
+
+  List<CancelToken?> pendingRequest = [];
 
   Http._internal() {
     // BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
@@ -49,12 +50,11 @@ class Http {
     // }
   }
 
-  ///初始化公共属性
-  ///
-  /// [baseUrl] 地址前缀
-  /// [connectTimeout] 连接超时赶时间
-  /// [receiveTimeout] 接收超时赶时间
-  /// [interceptors] 基础拦截器
+  // 初始化公共属性
+  // [baseUrl] 地址前缀
+  // [connectTimeout] 连接超时赶时间
+  // [receiveTimeout] 接收超时赶时间
+  // [interceptors] 基础拦截器
   void init({
     String? baseUrl,
     int connectTimeout = 15000,
@@ -73,9 +73,9 @@ class Http {
     }
   }
 
-  // 关闭dio
-  void cancelRequests({required CancelToken token}) {
-    _cancelToken.cancel("cancelled");
+  // 关闭所有 pending dio
+  void cancelRequests() {
+    pendingRequest.map((token) => token!.cancel('dio cancel'));
   }
 
   // 添加认证
@@ -91,6 +91,13 @@ class Http {
     //   };
     // }
     return headers;
+  }
+
+  // 获取cancelToken , 根据传入的参数查看使用者是否有动态传入cancel，没有就生成一个
+  CancelToken createDioCancelToken(CancelToken? cancelToken) {
+    CancelToken token = cancelToken ?? CancelToken();
+    pendingRequest.add(token);
+    return token;
   }
 
   Future get(
@@ -117,13 +124,14 @@ class Http {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
     Response response;
+    CancelToken dioCancelToken = createDioCancelToken(cancelToken);
     response = await dio.get(
       path,
       queryParameters: params,
       options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
+      cancelToken: dioCancelToken,
     );
-
+    pendingRequest.remove(dioCancelToken);
     return response.data;
   }
 
@@ -139,13 +147,15 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
+    CancelToken dioCancelToken = createDioCancelToken(cancelToken);
     var response = await dio.post(
       path,
       data: data,
       queryParameters: params,
       options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
+      cancelToken: dioCancelToken,
     );
+    pendingRequest.remove(dioCancelToken);
     return response.data;
   }
 
@@ -162,13 +172,15 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
+    CancelToken dioCancelToken = createDioCancelToken(cancelToken);
     var response = await dio.put(
       path,
       data: data,
       queryParameters: params,
       options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
+      cancelToken: dioCancelToken,
     );
+    pendingRequest.remove(dioCancelToken);
     return response.data;
   }
 
@@ -184,13 +196,15 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
+    CancelToken dioCancelToken = createDioCancelToken(cancelToken);
     var response = await dio.patch(
       path,
       data: data,
       queryParameters: params,
       options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
+      cancelToken: dioCancelToken,
     );
+    pendingRequest.remove(dioCancelToken);
     return response.data;
   }
 
@@ -207,13 +221,15 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
+    CancelToken dioCancelToken = createDioCancelToken(cancelToken);
     var response = await dio.delete(
       path,
       data: data,
       queryParameters: params,
       options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
+      cancelToken: dioCancelToken,
     );
+    pendingRequest.remove(dioCancelToken);
     return response.data;
   }
 }

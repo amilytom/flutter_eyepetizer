@@ -20,7 +20,6 @@ import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppBarTabPopular extends StatefulWidget {
@@ -58,7 +57,7 @@ class _AppBarTabPopularState extends State<AppBarTabPopular>
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                Get.toNamed(PageName.SEARCH);
+                PageRoutes.addRouter(routeName: PageName.SEARCH);
               },
             ),
           ],

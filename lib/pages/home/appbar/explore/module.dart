@@ -22,7 +22,6 @@ import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppBarTabExplore extends StatefulWidget {
@@ -64,7 +63,7 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
             IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                Get.toNamed(PageName.SEARCH);
+                PageRoutes.addRouter(routeName: PageName.SEARCH);
               },
             ),
           ],
@@ -520,8 +519,8 @@ class _TypesTabState extends State<TypesTab>
             String typeId = _typeList[idx]!.id!.toString();
             return GestureDetector(
               onTap: () {
-                Get.toNamed(
-                  PageName.TYPE_DETAILL,
+                PageRoutes.addRouter(
+                  routeName: PageName.TYPE_DETAILL,
                   parameters: {
                     "headerImg": headerImg,
                     "typeName": curTypeName,
@@ -768,8 +767,8 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                             Uri.parse(webUrl).queryParameters["nid"]!;
                         String queryTitle =
                             Uri.parse(enCodeUrl).queryParameters["title"]!;
-                        Get.toNamed(
-                          PageName.REEL_DETAILL,
+                        PageRoutes.addRouter(
+                          routeName: PageName.REEL_DETAILL,
                           parameters: {
                             "id": queryId,
                             "title": queryTitle,

@@ -23,7 +23,7 @@ class MyDioSocketException extends SocketException {
         );
 }
 
-/// 错误处理拦截器
+// 错误处理拦截器
 class ErrorInterceptor extends Interceptor {
   // 是否有网
   Future<bool> isConnected() async {

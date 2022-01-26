@@ -1,11 +1,14 @@
 // ignore_for_file: avoid_print, must_call_super
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+// components
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
-import 'package:flutter_eyepetizer/request/api_response.dart';
 // request
+import 'package:flutter_eyepetizer/request/api_response.dart';
 import 'package:flutter_eyepetizer/request/http_utils.dart';
 // routes
 import 'package:flutter_eyepetizer/router/index.dart';
@@ -15,12 +18,10 @@ import 'package:flutter_eyepetizer/utils/api.dart';
 // utils
 import 'package:flutter_eyepetizer/utils/toast.dart';
 // widget
-import 'package:flutter_eyepetizer/widget/img_state.dart';
+// import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppBarTabHome extends StatefulWidget {
   const AppBarTabHome({Key? key}) : super(key: key);
@@ -42,6 +43,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final ScrollController _scrollController = ScrollController();
+  final SwiperController _swiperController = SwiperController();
 
   AppBar _buildPulicAppBar() {
     return AppBar(
@@ -55,7 +57,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
         IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
-            Get.toNamed(PageName.SEARCH);
+            PageRoutes.addRouter(routeName: PageName.SEARCH);
           },
         ),
       ],
@@ -134,6 +136,13 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
 
   void _initScrollEvent() {
     _scrollController.addListener(() {
+      // 如果进行滚动加载大量数据 暂停轮播
+      if (_scrollController.offset > 220) {
+        _swiperController.stopAutoplay();
+      } else {
+        _swiperController.startAutoplay();
+      }
+      // 返回顶部按钮
       if (_scrollController.offset < 1000 && isShowFloatBtn) {
         setState(() {
           isShowFloatBtn = false;
@@ -160,13 +169,14 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
     super.dispose();
   }
 
-  Widget _headerSwiper() {
+  Widget _headerSwiper(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SizedBox(
         height: 220,
         child: Swiper(
           autoplay: true,
+          controller: _swiperController,
           itemBuilder: (BuildContext context, int idx) {
             String posterUrl = _swiperList[idx]!.data!.cover!.feed!;
             String videoTitle = _swiperList[idx]!.data!.title!;
@@ -195,21 +205,24 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                 child: Stack(
                   children: [
                     Positioned(
-                      child: FadeInImage(
-                        height: 220,
-                        fadeOutDuration: const Duration(milliseconds: 50),
-                        fadeInDuration: const Duration(milliseconds: 50),
-                        placeholder: const AssetImage('images/movie-lazy.gif'),
-                        image: NetworkImage(posterUrl),
-                        imageErrorBuilder: (context, obj, trace) {
-                          return ImgState(
-                            msg: "加载失败",
-                            icon: Icons.broken_image,
-                            errBgColor: Colors.black,
-                          );
-                        },
-                        fit: BoxFit.cover,
+                      child: ImageBox(
+                        imgUrl: posterUrl,
                       ),
+                      // child: FadeInImage(
+                      //   height: 220,
+                      //   fadeOutDuration: const Duration(milliseconds: 50),
+                      //   fadeInDuration: const Duration(milliseconds: 50),
+                      //   placeholder: const AssetImage('images/movie-lazy.gif'),
+                      //   image: NetworkImage(posterUrl),
+                      //   imageErrorBuilder: (context, obj, trace) {
+                      //     return ImgState(
+                      //       msg: "加载失败",
+                      //       icon: Icons.broken_image,
+                      //       errBgColor: Colors.black,
+                      //     );
+                      //   },
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
                     Positioned(
                       child: Container(
@@ -244,7 +257,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
     );
   }
 
-  Widget _loadingItems() {
+  Widget _loadingItems(BuildContext context) {
     List<Widget> childList = _itemList.asMap().keys.map((idx) {
       bool isNotExistAuthor =
           _itemList[idx]!.data!.author == null ? true : false;
@@ -286,19 +299,22 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
                       right: 0,
                       bottom: 0,
                       top: 0,
-                      child: FadeInImage(
-                        fadeOutDuration: const Duration(milliseconds: 50),
-                        fadeInDuration: const Duration(milliseconds: 50),
-                        placeholder: const AssetImage('images/movie-lazy.gif'),
-                        image: NetworkImage(videoPoster),
-                        imageErrorBuilder: (context, obj, trace) {
-                          return ImgState(
-                            msg: "加载失败",
-                            icon: Icons.broken_image,
-                          );
-                        },
-                        fit: BoxFit.cover,
+                      child: ImageBox(
+                        imgUrl: videoPoster,
                       ),
+                      // child: FadeInImage(
+                      //   fadeOutDuration: const Duration(milliseconds: 50),
+                      //   fadeInDuration: const Duration(milliseconds: 50),
+                      //   placeholder: const AssetImage('images/movie-lazy.gif'),
+                      //   image: NetworkImage(videoPoster),
+                      //   imageErrorBuilder: (context, obj, trace) {
+                      //     return ImgState(
+                      //       msg: "加载失败",
+                      //       icon: Icons.broken_image,
+                      //     );
+                      //   },
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
                     Positioned(
                       left: 10,
@@ -416,9 +432,9 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
           child: ListView.builder(
             itemBuilder: (BuildContext ctx, int idx) {
               if (idx == 0) {
-                return _headerSwiper();
+                return _headerSwiper(context);
               } else {
-                return _loadingItems();
+                return _loadingItems(context);
               }
             },
             // itemExtent: 100.0,
@@ -457,4 +473,32 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class ImageBox extends StatelessWidget {
+  final String imgUrl;
+  const ImageBox({
+    Key? key,
+    required this.imgUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ExtendedImage.network(
+      imgUrl,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      loadStateChanged: (ExtendedImageState state) {
+        if (state.extendedImageLoadState == LoadState.loading) {
+          return Image.asset(
+            "images/movie-lazy.gif",
+            fit: BoxFit.fill,
+          );
+        } else {
+          return null;
+        }
+      },
+      fit: BoxFit.fill,
+    );
+  }
 }

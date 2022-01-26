@@ -21,10 +21,10 @@ class AppException implements Exception {
 
   factory AppException.create(DioError error) {
     switch (error.type) {
-      case DioErrorType.cancel:
-        {
-          return BadRequestException(-1, "请求取消");
-        }
+      // case DioErrorType.cancel:
+      //   {
+      //     return BadRequestException(-1, "请求取消");
+      //   }
       case DioErrorType.connectTimeout:
         {
           return BadRequestException(-1, "连接超时");

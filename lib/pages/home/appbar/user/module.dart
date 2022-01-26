@@ -5,7 +5,6 @@ import 'package:flutter/painting.dart';
 //
 import 'package:flutter_eyepetizer/router/index.dart';
 import 'package:flutter_eyepetizer/utils/config.dart';
-import 'package:get/get.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,7 +38,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       "icon": Icons.history,
       "icoColor": Colors.amber[800],
       "cb": () {
-        Get.toNamed(PageName.VIDEO_HISTORY);
+        PageRoutes.addRouter(routeName: PageName.VIDEO_HISTORY);
       },
     },
     {
@@ -63,7 +62,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       "icon": Icons.feedback,
       "icoColor": Colors.blue[800],
       "cb": () {
-        Get.toNamed(PageName.USER_DECLARE);
+        PageRoutes.addRouter(routeName: PageName.USER_DECLARE);
       },
     },
   ];
