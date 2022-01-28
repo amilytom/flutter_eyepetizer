@@ -41,8 +41,6 @@ class AppException implements Exception {
         {
           try {
             int? errCode = error.response!.statusCode;
-            // String errMsg = error.response.statusMessage;
-            // return ErrorEntity(code: errCode, message: errMsg);
             switch (errCode) {
               case 400:
                 {
@@ -92,7 +90,7 @@ class AppException implements Exception {
         }
       default:
         {
-          return AppException(-1, error.error.message);
+          return AppException(-1, "当前网络不可用，请检查您的网络");
         }
     }
   }

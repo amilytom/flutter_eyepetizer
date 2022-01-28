@@ -1,8 +1,10 @@
 // ignore_for_file: must_call_super, avoid_print
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
@@ -18,11 +20,14 @@ import 'package:flutter_eyepetizer/schema/types.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+Follow fromJsonFollow(dynamic response) => Follow.fromJson(response);
+Types fromJsonTypes(dynamic response) => Types.fromJson(response);
+Reel fromJsonReel(dynamic response) => Reel.fromJson(response);
 
 class AppBarTabExplore extends StatefulWidget {
   const AppBarTabExplore({Key? key}) : super(key: key);
@@ -54,6 +59,7 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
+          elevation: 8.0,
           leading: Container(),
           title: Container(
             alignment: Alignment.center,
@@ -106,8 +112,8 @@ class FollowTabState extends State<FollowTab>
   Future<ApiResponse<Follow>> getFollowData() async {
     try {
       dynamic response = await HttpUtils.get(nextPageUrl!);
-      print(response);
-      Follow data = Follow.fromJson(response);
+      // print(response);
+      Follow data = await compute(fromJsonFollow, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -275,21 +281,8 @@ class FollowTabState extends State<FollowTab>
                                 right: 0,
                                 bottom: 0,
                                 top: 0,
-                                child: FadeInImage(
-                                  fadeOutDuration:
-                                      const Duration(milliseconds: 50),
-                                  fadeInDuration:
-                                      const Duration(milliseconds: 50),
-                                  placeholder:
-                                      const AssetImage('images/movie-lazy.gif'),
-                                  image: NetworkImage(curVideoItemPoster),
-                                  imageErrorBuilder: (context, obj, trace) {
-                                    return ImgState(
-                                      msg: "加载失败",
-                                      icon: Icons.broken_image,
-                                    );
-                                  },
-                                  fit: BoxFit.cover,
+                                child: ImageExends(
+                                  imgUrl: curVideoItemPoster,
                                 ),
                               ),
                               Positioned(
@@ -461,8 +454,8 @@ class _TypesTabState extends State<TypesTab>
   Future<ApiResponse<Types>> getTypesData() async {
     try {
       dynamic response = await HttpUtils.get(typesUrl);
-      print(response);
-      Types data = Types.fromJson(response);
+      // print(response);
+      Types data = await compute(fromJsonTypes, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -535,20 +528,8 @@ class _TypesTabState extends State<TypesTab>
                     right: 0,
                     bottom: 0,
                     top: 0,
-                    child: FadeInImage(
-                      height: 220,
-                      fadeOutDuration: const Duration(milliseconds: 50),
-                      fadeInDuration: const Duration(milliseconds: 50),
-                      placeholder: const AssetImage('images/movie-lazy.gif'),
-                      image: NetworkImage(posterUrl),
-                      imageErrorBuilder: (context, obj, trace) {
-                        return ImgState(
-                          msg: "加载失败",
-                          icon: Icons.broken_image,
-                          errBgColor: Colors.black,
-                        );
-                      },
-                      fit: BoxFit.cover,
+                    child: ImageExends(
+                      imgUrl: posterUrl,
                     ),
                   ),
                   Positioned(
@@ -627,8 +608,8 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
   Future<ApiResponse<Reel>> getReelData() async {
     try {
       dynamic response = await HttpUtils.get(nextPageUrl!);
-      print(response);
-      Reel data = Reel.fromJson(response);
+      // print(response);
+      Reel data = await compute(fromJsonReel, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -782,18 +763,8 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                   },
                   child: SizedBox(
                     height: 210,
-                    child: FadeInImage(
-                      fadeOutDuration: const Duration(milliseconds: 50),
-                      fadeInDuration: const Duration(milliseconds: 50),
-                      placeholder: const AssetImage('images/movie-lazy.gif'),
-                      image: NetworkImage(curReelItemPoster),
-                      imageErrorBuilder: (context, obj, trace) {
-                        return ImgState(
-                          msg: "加载失败",
-                          icon: Icons.broken_image,
-                        );
-                      },
-                      fit: BoxFit.cover,
+                    child: ImageExends(
+                      imgUrl: curReelItemPoster,
                     ),
                   ),
                 ),

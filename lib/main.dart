@@ -19,7 +19,7 @@ Future<void> main() async {
 }
 
 Future<void> initStore() async {
-  // 初始化本地存储类
+  // 初始化本地存储类d
   await SpUtil().init();
   // 初始化request类
   HttpUtils.init(

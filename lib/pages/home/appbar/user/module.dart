@@ -20,7 +20,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
   List<Map<String, dynamic>> items = [
     {
       "type": "data",
-      "name": "本项目GitHub",
+      "name": "项目仓库",
       "icon": Icons.public,
       "icoColor": Colors.red[800],
       "cb": () async {
@@ -28,9 +28,6 @@ class _AppBarTabUserState extends State<AppBarTabUser>
           await launch(myGithub);
         }
       },
-    },
-    {
-      "type": "divider",
     },
     {
       "type": "data",
@@ -42,9 +39,6 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       },
     },
     {
-      "type": "divider",
-    },
-    {
       "type": "data",
       "name": "分享APP",
       "icon": Icons.share,
@@ -52,9 +46,6 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       "cb": () {
         ShareExtend.share(appName, "text");
       },
-    },
-    {
-      "type": "divider",
     },
     {
       "type": "data",
@@ -71,6 +62,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 8.0,
         title: Container(
           alignment: Alignment.center,
           child: const Text("我的"),
@@ -80,50 +72,45 @@ class _AppBarTabUserState extends State<AppBarTabUser>
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            CartStatic(
-              SizedBox(
-                height: 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ClipOval(
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.black12,
-                        child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Image.asset("images/user-logo.jpg"),
-                        ),
+            SizedBox(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.black12,
+                      child: Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: Image.asset("images/user-logo.jpg"),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "开不开眼？",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "开不开眼？",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  )
+                ],
               ),
             ),
-            CartStatic(
-              Column(
-                children: items.map((e) {
-                  if (e["type"]! == "data") {
-                    return MenuRow(
-                      cb: e["cb"]!,
-                      icoColor: e["icoColor"]!,
-                      name: e["name"]!,
-                      icon: e["icon"]!,
-                    );
-                  }
-                  return const Divider(height: 1);
-                }).toList(),
-              ),
+            const Divider(height: 1),
+            const SizedBox(height: 20),
+            Column(
+              children: items.map((e) {
+                return MenuRow(
+                  cb: e["cb"]!,
+                  icoColor: e["icoColor"]!,
+                  name: e["name"]!,
+                  icon: e["icon"]!,
+                );
+              }).toList(),
             ),
             const SizedBox(height: 20),
           ],
@@ -134,38 +121,6 @@ class _AppBarTabUserState extends State<AppBarTabUser>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class CartStatic extends StatelessWidget {
-  Widget child;
-  CartStatic(this.child, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          // border: Border(bottom: BorderSide(color: Colors.black12)),
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0.0, 0.0),
-              blurRadius: 10,
-              spreadRadius: 8,
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: child,
-        ),
-      ),
-    );
-  }
 }
 
 class MenuRow extends StatelessWidget {
@@ -184,7 +139,6 @@ class MenuRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
       child: InkWell(
         onTap: () {
           cb();
@@ -195,13 +149,14 @@ class MenuRow extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   icon,
                   color: icoColor,
                   size: 28,
                 ),
-                const SizedBox(width: 15),
+                const SizedBox(width: 10),
                 Text(
                   name,
                   style: const TextStyle(

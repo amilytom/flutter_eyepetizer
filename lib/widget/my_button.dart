@@ -22,7 +22,7 @@ class MyButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        elevation: MaterialStateProperty.all(0),
+        elevation: MaterialStateProperty.all(0.8),
         backgroundColor: MaterialStateProperty.all(color),
       ),
       onPressed: cb!,

@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, avoid_print
 import 'package:flutter/material.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 // components
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 // glabel controller
 import 'package:flutter_eyepetizer/service/video_history.dart';
 // widget
 import 'package:flutter_eyepetizer/utils/toast.dart';
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
@@ -33,6 +33,7 @@ class VideoHistory extends StatelessWidget {
             title: e["title"]!,
             typeName: e["typeName"]!,
             videoPoster: e["videoPoster"]!,
+            isHero: false,
             child: Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -46,18 +47,8 @@ class VideoHistory extends StatelessWidget {
                   SizedBox(
                     width: 150,
                     height: 100,
-                    child: FadeInImage(
-                      fadeOutDuration: const Duration(milliseconds: 50),
-                      fadeInDuration: const Duration(milliseconds: 50),
-                      placeholder: const AssetImage('images/movie-lazy.gif'),
-                      image: NetworkImage(e["videoPoster"]),
-                      imageErrorBuilder: (context, obj, trace) {
-                        return ImgState(
-                          msg: "加载失败",
-                          icon: Icons.broken_image,
-                        );
-                      },
-                      fit: BoxFit.cover,
+                    child: ImageExends(
+                      imgUrl: e["videoPoster"],
                     ),
                   ),
                   Expanded(
@@ -100,6 +91,7 @@ class VideoHistory extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
+          elevation: 8.0,
           title: const Text("历史记录"),
           actions: [
             MyIconButton(

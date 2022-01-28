@@ -16,6 +16,7 @@ class VideoFactory extends StatelessWidget {
   final String videoPoster;
   final Widget child;
   final bool isPopCurRoute;
+  final bool isHero;
   Function? routerPopEnter;
   VideoFactory({
     Key? key,
@@ -31,6 +32,7 @@ class VideoFactory extends StatelessWidget {
     required this.videoPoster,
     required this.child,
     this.isPopCurRoute = false,
+    this.isHero = true,
     this.routerPopEnter,
   }) : super(key: key);
 
@@ -58,10 +60,12 @@ class VideoFactory extends StatelessWidget {
           },
         );
       },
-      child: Hero(
-        tag: id,
-        child: child,
-      ),
+      child: isHero
+          ? Hero(
+              tag: id,
+              child: child,
+            )
+          : child,
     );
   }
 }

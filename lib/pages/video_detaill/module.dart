@@ -5,7 +5,9 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:better_video_player/better_video_player.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 //
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
@@ -21,10 +23,11 @@ import 'package:flutter_eyepetizer/service/video_history.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
+
+VideoRelated fromJson(dynamic response) => VideoRelated.fromJson(response);
 
 class VideoDetaill extends StatefulWidget {
   const VideoDetaill({Key? key}) : super(key: key);
@@ -36,7 +39,6 @@ class VideoDetaill extends StatefulWidget {
 class _VideoDetaillState extends State<VideoDetaill>
     with AutomaticKeepAliveClientMixin {
   final BetterVideoPlayerController controller = BetterVideoPlayerController();
-  late StreamSubscription playerEventSubscription;
   //
   bool isShowPlayer = false;
   //
@@ -58,10 +60,6 @@ class _VideoDetaillState extends State<VideoDetaill>
   @override
   void initState() {
     super.initState();
-    // 设置播放源
-    playerEventSubscription = controller.playerEventStream.listen((event) {
-      print("wang $event");
-    });
     // 加入历史记录
     historyService.add(
       id: videoId,
@@ -91,7 +89,6 @@ class _VideoDetaillState extends State<VideoDetaill>
   void dispose() {
     controller.pause();
     controller.dispose();
-    playerEventSubscription.cancel();
     super.dispose();
   }
 
@@ -186,8 +183,8 @@ class _VideoInfoState extends State<VideoInfo>
   Future<ApiResponse<VideoRelated>> getVideoRelatedData() async {
     try {
       dynamic response = await HttpUtils.get('${nextPageUrl}?id=${id}');
-      print(response);
-      VideoRelated data = VideoRelated.fromJson(response);
+      // print(response);
+      VideoRelated data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -203,7 +200,8 @@ class _VideoInfoState extends State<VideoInfo>
     if (relatedResponse.status == Status.COMPLETED) {
       setState(() {
         stateCode = 1;
-        _itemList.addAll(relatedResponse.data!.itemList!);
+        _itemList.addAll(relatedResponse.data!.itemList ?? []);
+        print(relatedResponse.data!.itemList);
       });
     } else if (relatedResponse.status == Status.ERROR) {
       setState(() {
@@ -299,10 +297,12 @@ class _VideoInfoState extends State<VideoInfo>
                   title: e.data!.title!,
                   typeName: e.data!.category!,
                   desText: e.data!.description!,
-                  subTime:
-                      DateTime.fromMillisecondsSinceEpoch(e.data!.releaseTime!)
+                  subTime: e.data!.releaseTime != null
+                      ? DateTime.fromMillisecondsSinceEpoch(
+                              e.data!.releaseTime!)
                           .toString()
-                          .substring(0, 19),
+                          .substring(0, 19)
+                      : "暂无",
                   avatarUrl:
                       e.data!.author != null ? e.data!.author!.icon! : "",
                   authorDes: e.data!.author != null
@@ -328,19 +328,8 @@ class _VideoInfoState extends State<VideoInfo>
                           SizedBox(
                             width: 150,
                             height: 100,
-                            child: FadeInImage(
-                              fadeOutDuration: const Duration(milliseconds: 50),
-                              fadeInDuration: const Duration(milliseconds: 50),
-                              placeholder:
-                                  const AssetImage('images/movie-lazy.gif'),
-                              image: NetworkImage(e.data!.cover!.feed!),
-                              imageErrorBuilder: (context, obj, trace) {
-                                return ImgState(
-                                  msg: "加载失败",
-                                  icon: Icons.broken_image,
-                                );
-                              },
-                              fit: BoxFit.cover,
+                            child: ImageExends(
+                              imgUrl: e.data!.cover!.feed!,
                             ),
                           ),
                           Expanded(

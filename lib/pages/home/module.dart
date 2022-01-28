@@ -1,5 +1,4 @@
 // ignore_for_file: must_call_super, non_constant_identifier_names
-import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // appbar view
@@ -38,36 +37,23 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        bottomNavigationBar: BottomBar(
-          selectedIndex: _curPage,
-          onTap: (int index) {
-            _pageController.jumpToPage(index);
-            setState(() => _curPage = index);
-          },
-          items: <BottomBarItem>[
-            BottomBarItem(
-              icon: const Icon(Icons.home),
-              title: const Text('首页'),
-              activeColor: Colors.blue,
-            ),
-            BottomBarItem(
-              icon: const Icon(Icons.explore),
-              title: const Text('发现'),
-              activeColor: Colors.red,
-              darkActiveColor: Colors.red.shade400, // Optional
-            ),
-            BottomBarItem(
-              icon: const Icon(Icons.local_fire_department),
-              title: const Text('热门'),
-              activeColor: Colors.greenAccent.shade700,
-              darkActiveColor: Colors.greenAccent.shade400, // Optional
-            ),
-            BottomBarItem(
-              icon: const Icon(Icons.person),
-              title: const Text('我的'),
-              activeColor: Colors.orange,
-            ),
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 8.0,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _curPage,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
+            BottomNavigationBarItem(icon: Icon(Icons.explore), label: "发现"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.local_fire_department), label: "热门"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的"),
           ],
+          fixedColor: Colors.blue,
+          onTap: (int idx) {
+            //跳转到指定页面
+            _pageController.jumpToPage(idx);
+            setState(() => _curPage = idx);
+          },
         ),
         body: PageView(
           controller: _pageController,

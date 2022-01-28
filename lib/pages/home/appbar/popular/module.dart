@@ -1,8 +1,10 @@
 // ignore_for_file: must_call_super, prefer_const_constructors, avoid_print
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
@@ -16,11 +18,12 @@ import 'package:flutter_eyepetizer/schema/popular_coll.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+PopularColl fromJson(dynamic response) => PopularColl.fromJson(response);
 
 class AppBarTabPopular extends StatefulWidget {
   const AppBarTabPopular({Key? key}) : super(key: key);
@@ -48,6 +51,7 @@ class _AppBarTabPopularState extends State<AppBarTabPopular>
       length: tabUrlList.length,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 8.0,
           leading: Container(),
           title: Container(
             alignment: Alignment.center,
@@ -102,8 +106,8 @@ class _TabBarItemCartState extends State<TabBarItemCart>
   Future<ApiResponse<PopularColl>> getFollowData() async {
     try {
       dynamic response = await HttpUtils.get(nextPageUrl!);
-      print(response);
-      PopularColl data = PopularColl.fromJson(response);
+      // print(response);
+      PopularColl data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -263,18 +267,8 @@ class _TabBarItemCartState extends State<TabBarItemCart>
                             right: 0,
                             bottom: 0,
                             top: 0,
-                            child: FadeInImage(
-                              fadeOutDuration: const Duration(milliseconds: 50),
-                              fadeInDuration: const Duration(milliseconds: 50),
-                              placeholder: AssetImage('images/movie-lazy.gif'),
-                              image: NetworkImage(videoPoster),
-                              imageErrorBuilder: (context, obj, trace) {
-                                return ImgState(
-                                  msg: "加载失败",
-                                  icon: Icons.broken_image,
-                                );
-                              },
-                              fit: BoxFit.cover,
+                            child: ImageExends(
+                              imgUrl: videoPoster,
                             ),
                           ),
                           Positioned(

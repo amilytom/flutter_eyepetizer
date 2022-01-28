@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print, must_call_super
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 //
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
@@ -13,11 +15,12 @@ import 'package:flutter_eyepetizer/schema/video_search.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+VideoSearch fromJson(dynamic response) => VideoSearch.fromJson(response);
 
 class VideoSearchPage extends StatefulWidget {
   const VideoSearchPage({Key? key}) : super(key: key);
@@ -44,8 +47,8 @@ class _VideoSearchPageState extends State<VideoSearchPage>
   Future<ApiResponse<VideoSearch>> getReelInfoData() async {
     try {
       dynamic response = await HttpUtils.get('$nextPageUrl$curSearchVal');
-      print(response);
-      VideoSearch data = VideoSearch.fromJson(response);
+      // print(response);
+      VideoSearch data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -126,7 +129,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
   AppBar _buildPublicAppBar() {
     return AppBar(
       titleSpacing: 0,
-      elevation: 0,
+      elevation: 8.0,
       title: TextField(
         style: const TextStyle(color: Colors.white),
         focusNode: _commentFocus,
@@ -270,21 +273,8 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                               right: 0,
                               bottom: 0,
                               top: 0,
-                              child: FadeInImage(
-                                fadeOutDuration:
-                                    const Duration(milliseconds: 50),
-                                fadeInDuration:
-                                    const Duration(milliseconds: 50),
-                                placeholder:
-                                    const AssetImage('images/movie-lazy.gif'),
-                                image: NetworkImage(videoPoster),
-                                imageErrorBuilder: (context, obj, trace) {
-                                  return ImgState(
-                                    msg: "加载失败",
-                                    icon: Icons.broken_image,
-                                  );
-                                },
-                                fit: BoxFit.cover,
+                              child: ImageExends(
+                                imgUrl: videoPoster,
                               ),
                             ),
                             Positioned(

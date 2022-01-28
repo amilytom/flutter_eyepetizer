@@ -42,10 +42,11 @@ class ErrorInterceptor extends Interceptor {
         port: err.error?.port,
       );
     }
+    // 是否已经连接了网络，不判断是否没网
     if (err.type == DioErrorType.other) {
       bool isConnectNetWork = await isConnected();
       if (!isConnectNetWork && err.error is MyDioSocketException) {
-        err.error.message = "当前网络不可用，请检查您的网络";
+        err.error.message = "当前无网络，请连接网络";
       }
     }
     // error统一处理

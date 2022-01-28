@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print, unnecessary_null_comparison, must_call_super
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
@@ -14,13 +16,14 @@ import 'package:flutter_eyepetizer/schema/type_info.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/config.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 //
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+TypeInfo fromJson(dynamic response) => TypeInfo.fromJson(response);
 
 class TypeDetaill extends StatefulWidget {
   const TypeDetaill({Key? key}) : super(key: key);
@@ -52,8 +55,8 @@ class _TypeDetaillState extends State<TypeDetaill>
           ? '${nextPageUrl!}?id=${Get.parameters["id"]!}$addQuery'
           : '${nextPageUrl!}$addQuery';
       dynamic response = await HttpUtils.get(reqUrl);
-      print(response);
-      TypeInfo data = TypeInfo.fromJson(response);
+      // print(response);
+      TypeInfo data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -62,7 +65,8 @@ class _TypeDetaillState extends State<TypeDetaill>
   }
 
   Future<void> _loading() async {
-    // _refreshController.refreshCompleted(resetFooterState: true);
+    // 延时下再加载，防止和路由动画重叠，卡顿
+    await Future.delayed(const Duration(milliseconds: 400));
     ApiResponse<TypeInfo> typeInfoResponse = await getTypeInfoData();
     _setRefreshState(typeInfoResponse);
     if (!mounted) {
@@ -127,9 +131,10 @@ class _TypeDetaillState extends State<TypeDetaill>
       controller: _scrollController,
       slivers: [
         SliverAppBar(
+          elevation: 8.0,
           title: Text(typeName),
           pinned: true,
-          expandedHeight: 260.0,
+          expandedHeight: 220,
           flexibleSpace: FlexibleSpaceBar(
             background: Image.network(
               sliverBg,
@@ -185,21 +190,8 @@ class _TypeDetaillState extends State<TypeDetaill>
                               right: 0,
                               bottom: 0,
                               top: 0,
-                              child: FadeInImage(
-                                fadeOutDuration:
-                                    const Duration(milliseconds: 50),
-                                fadeInDuration:
-                                    const Duration(milliseconds: 50),
-                                placeholder:
-                                    const AssetImage('images/movie-lazy.gif'),
-                                image: NetworkImage(videoPoster),
-                                imageErrorBuilder: (context, obj, trace) {
-                                  return ImgState(
-                                    msg: "加载失败",
-                                    icon: Icons.broken_image,
-                                  );
-                                },
-                                fit: BoxFit.cover,
+                              child: ImageExends(
+                                imgUrl: videoPoster,
                               ),
                             ),
                             Positioned(
@@ -328,6 +320,7 @@ class _TypeDetaillState extends State<TypeDetaill>
     return Scaffold(
       appBar: isInit == null
           ? AppBar(
+              elevation: 8.0,
               title: Text(Get.parameters["typeName"]!),
             )
           : null,

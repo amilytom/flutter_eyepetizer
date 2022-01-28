@@ -7,6 +7,7 @@ class UserDeclare extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 8.0,
         title: const Text('免责申明'),
       ),
       body: ListView(

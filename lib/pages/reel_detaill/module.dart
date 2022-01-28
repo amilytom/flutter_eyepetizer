@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print, must_call_super, must_be_immutable
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
@@ -14,10 +16,11 @@ import 'package:flutter_eyepetizer/schema/reel_info.dart';
 import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 //
-import 'package:flutter_eyepetizer/widget/img_state.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
 import 'package:get/get.dart';
+
+ReelInfo fromJson(dynamic response) => ReelInfo.fromJson(response);
 
 class ReelDetaill extends StatefulWidget {
   const ReelDetaill({Key? key}) : super(key: key);
@@ -38,8 +41,8 @@ class _ReelDetaillState extends State<ReelDetaill>
     try {
       String paramId = Get.parameters["id"]!;
       dynamic response = await HttpUtils.get(initPageUrl + paramId);
-      print(response);
-      ReelInfo data = ReelInfo.fromJson(response);
+      // print(response);
+      ReelInfo data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
       print(e);
@@ -48,6 +51,8 @@ class _ReelDetaillState extends State<ReelDetaill>
   }
 
   Future<void> _pullData() async {
+    // 延时下再加载，防止和路由动画重叠，卡顿
+    await Future.delayed(const Duration(milliseconds: 400));
     ApiResponse<ReelInfo> reelInfoResponse = await getReelInfoData();
     if (!mounted) {
       return;
@@ -116,6 +121,7 @@ class _ReelDetaillState extends State<ReelDetaill>
     }
     return Scaffold(
       appBar: AppBar(
+        elevation: 8.0,
         title: Container(
           alignment: Alignment.center,
           child: Text(pageTitle),
@@ -154,19 +160,9 @@ class Header extends StatelessWidget {
             right: 0,
             top: 0,
             child: SizedBox(
-              height: 260,
-              child: FadeInImage(
-                fadeOutDuration: const Duration(milliseconds: 50),
-                fadeInDuration: const Duration(milliseconds: 50),
-                placeholder: const AssetImage('images/movie-lazy.gif'),
-                image: NetworkImage(bgImg!),
-                imageErrorBuilder: (context, obj, trace) {
-                  return ImgState(
-                    msg: "加载失败",
-                    icon: Icons.broken_image,
-                  );
-                },
-                fit: BoxFit.cover,
+              height: 220,
+              child: ImageExends(
+                imgUrl: bgImg!,
               ),
             ),
           ),
@@ -327,19 +323,8 @@ class CollList extends StatelessWidget {
                       videoPoster: videoPoster,
                       child: SizedBox(
                         height: 210,
-                        child: FadeInImage(
-                          fadeOutDuration: const Duration(milliseconds: 50),
-                          fadeInDuration: const Duration(milliseconds: 50),
-                          placeholder:
-                              const AssetImage('images/movie-lazy.gif'),
-                          image: NetworkImage(videoPoster),
-                          imageErrorBuilder: (context, obj, trace) {
-                            return ImgState(
-                              msg: "加载失败",
-                              icon: Icons.broken_image,
-                            );
-                          },
-                          fit: BoxFit.cover,
+                        child: ImageExends(
+                          imgUrl: videoPoster,
                         ),
                       ),
                     ),
