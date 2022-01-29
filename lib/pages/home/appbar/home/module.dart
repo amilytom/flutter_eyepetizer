@@ -1,10 +1,10 @@
-// ignore_for_file: avoid_print, must_call_super, must_be_immutable
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_eyepetizer/components/image_extends.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 // components
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 // request
@@ -14,14 +14,13 @@ import 'package:flutter_eyepetizer/request/http_utils.dart';
 import 'package:flutter_eyepetizer/router/index.dart';
 // schema
 import 'package:flutter_eyepetizer/schema/feed.dart';
-import 'package:flutter_eyepetizer/utils/api.dart';
 // utils
+import 'package:flutter_eyepetizer/utils/api.dart';
 import 'package:flutter_eyepetizer/utils/toast.dart';
 // widget
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 Feed fromJson(dynamic response) => Feed.fromJson(response);
 
@@ -61,7 +60,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
         IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
-            PageRoutes.addRouter(routeName: PageName.SEARCH);
+            PageRoutes.addRouter(routeName: PageName.search);
           },
         ),
       ],
@@ -75,7 +74,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       Feed data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -86,7 +85,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
     if (!mounted) {
       return;
     }
-    if (swiperResponse.status == Status.COMPLETED) {
+    if (swiperResponse.status == Status.completed) {
       setState(() {
         slivers = [];
         nextPageUrl = swiperResponse.data!.nextPageUrl;
@@ -102,14 +101,14 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
       });
       // 拉取新的，列表
       await _loading();
-    } else if (swiperResponse.status == Status.ERROR) {
+    } else if (swiperResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = swiperResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar1 swiper， url: $initPageUrl");
-      print(swiperResponse.exception);
+      // print("发生错误，位置home bottomBar1 swiper， url: $initPageUrl");
+      // print(swiperResponse.exception);
     }
   }
 
@@ -119,7 +118,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
     if (!mounted) {
       return;
     }
-    if (itemResponse.status == Status.COMPLETED) {
+    if (itemResponse.status == Status.completed) {
       setState(() {
         stateCode = 1;
         isInit = isInit ?? true;
@@ -128,19 +127,19 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
         slivers.add(
             _buildLoadingItems(itemResponse.data!.issueList![0]!.itemList));
       });
-    } else if (itemResponse.status == Status.ERROR) {
+    } else if (itemResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = itemResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar1 items， url: $nextPageUrl");
+      // print("发生错误，位置home bottomBar1 items， url: $nextPageUrl");
     }
   }
 
   void _setRefreshState(ApiResponse<Feed> res) {
     if (!mounted) return;
-    if (res.status == Status.COMPLETED && res.data!.nextPageUrl == null) {
+    if (res.status == Status.completed && res.data!.nextPageUrl == null) {
       _refreshController.loadNoData();
     } else {
       _refreshController.loadComplete();
@@ -163,6 +162,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
   }
 
   @override
+  @mustCallSuper
   void initState() {
     super.initState();
     _refresh();
@@ -190,6 +190,7 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (stateCode == 0) {
       return Scaffold(
         appBar: _buildPulicAppBar(),
@@ -283,8 +284,8 @@ class _AppBarTabHomeState extends State<AppBarTabHome>
 }
 
 class BuildItems extends StatefulWidget {
-  FeedIssueListItemList? target;
-  BuildItems({Key? key, required this.target}) : super(key: key);
+  final FeedIssueListItemList? target;
+  const BuildItems({Key? key, required this.target}) : super(key: key);
 
   @override
   State<BuildItems> createState() => _BuildItemsState();
@@ -301,61 +302,60 @@ class _BuildItemsState extends State<BuildItems> {
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
         children: [
-          VideoFactory(
-            id: widget.target!.data!.id!.toString(),
-            playUrl: widget.target!.data!.playUrl!,
-            title: widget.target!.data!.title!,
-            typeName: widget.target!.data!.category!,
-            desText: widget.target!.data!.description!,
-            subTime: DateTime.fromMillisecondsSinceEpoch(
-                    widget.target!.data!.releaseTime!)
-                .toString()
-                .substring(0, 19),
-            avatarUrl: widget.target!.data!.author != null
-                ? widget.target!.data!.author!.icon!
-                : "",
-            authorDes: widget.target!.data!.author != null
-                ? widget.target!.data!.author!.description!
-                : "",
-            authorName: widget.target!.data!.author != null
-                ? widget.target!.data!.author!.name!
-                : "",
-            videoPoster: videoPoster,
-            child: SizedBox(
-              height: 210,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    top: 0,
+          SizedBox(
+            height: 210,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  top: 0,
+                  child: VideoFactory(
+                    id: widget.target!.data!.id!.toString(),
+                    playUrl: widget.target!.data!.playUrl!,
+                    title: widget.target!.data!.title!,
+                    typeName: widget.target!.data!.category!,
+                    desText: widget.target!.data!.description!,
+                    subTime: DateTime.fromMillisecondsSinceEpoch(
+                            widget.target!.data!.releaseTime!)
+                        .toString()
+                        .substring(0, 19),
+                    avatarUrl: widget.target!.data!.author != null
+                        ? widget.target!.data!.author!.icon!
+                        : "",
+                    authorDes: widget.target!.data!.author != null
+                        ? widget.target!.data!.author!.description!
+                        : "",
+                    authorName: widget.target!.data!.author != null
+                        ? widget.target!.data!.author!.name!
+                        : "",
+                    videoPoster: videoPoster,
                     child: ImageExends(
                       imgUrl: videoPoster,
                     ),
                   ),
-                  Positioned(
-                    left: 10,
-                    top: 10,
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(25),
-                        ),
-                      ),
-                      child: Text(
-                        videoCategory,
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.white),
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(25),
                       ),
                     ),
+                    child: Text(
+                      videoCategory,
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           VideoBanner(
@@ -388,9 +388,9 @@ class _BuildItemsState extends State<BuildItems> {
 }
 
 class BuildHeader extends StatefulWidget {
-  List<FeedIssueListItemList?> list;
-  SwiperController swiperController;
-  BuildHeader({
+  final List<FeedIssueListItemList?> list;
+  final SwiperController swiperController;
+  const BuildHeader({
     Key? key,
     required this.list,
     required this.swiperController,
@@ -414,57 +414,57 @@ class _BuildHeaderState extends State<BuildHeader> {
             itemBuilder: (BuildContext context, int idx) {
               String posterUrl = widget.list[idx]!.data!.cover!.feed!;
               String videoTitle = widget.list[idx]!.data!.title!;
-              return VideoFactory(
-                id: widget.list[idx]!.data!.id!.toString(),
-                playUrl: widget.list[idx]!.data!.playUrl!,
-                title: widget.list[idx]!.data!.title!,
-                typeName: widget.list[idx]!.data!.category!,
-                desText: widget.list[idx]!.data!.description!,
-                subTime: DateTime.fromMillisecondsSinceEpoch(
-                        widget.list[idx]!.data!.releaseTime!)
-                    .toString()
-                    .substring(0, 19),
-                avatarUrl: widget.list[idx]!.data!.author != null
-                    ? widget.list[idx]!.data!.author!.icon!
-                    : "",
-                authorDes: widget.list[idx]!.data!.author != null
-                    ? widget.list[idx]!.data!.author!.description!
-                    : "",
-                authorName: widget.list[idx]!.data!.author != null
-                    ? widget.list[idx]!.data!.author!.name!
-                    : "",
-                videoPoster: posterUrl,
-                child: SizedBox(
-                  height: 220,
-                  child: Stack(
-                    children: [
-                      Positioned(
+              return SizedBox(
+                height: 220,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      child: VideoFactory(
+                        id: widget.list[idx]!.data!.id!.toString(),
+                        playUrl: widget.list[idx]!.data!.playUrl!,
+                        title: widget.list[idx]!.data!.title!,
+                        typeName: widget.list[idx]!.data!.category!,
+                        desText: widget.list[idx]!.data!.description!,
+                        subTime: DateTime.fromMillisecondsSinceEpoch(
+                                widget.list[idx]!.data!.releaseTime!)
+                            .toString()
+                            .substring(0, 19),
+                        avatarUrl: widget.list[idx]!.data!.author != null
+                            ? widget.list[idx]!.data!.author!.icon!
+                            : "",
+                        authorDes: widget.list[idx]!.data!.author != null
+                            ? widget.list[idx]!.data!.author!.description!
+                            : "",
+                        authorName: widget.list[idx]!.data!.author != null
+                            ? widget.list[idx]!.data!.author!.name!
+                            : "",
+                        videoPoster: posterUrl,
                         child: ImageExends(
                           imgUrl: posterUrl,
                         ),
                       ),
-                      Positioned(
-                        child: Container(
-                          height: 40,
-                          color: const Color.fromRGBO(0, 0, 0, 0.5),
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text(
-                              videoTitle,
-                              style: const TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.white,
-                              ),
+                    ),
+                    Positioned(
+                      child: Container(
+                        height: 40,
+                        color: const Color.fromRGBO(0, 0, 0, 0.5),
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            videoTitle,
+                            style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
                       ),
-                    ],
-                  ),
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                    ),
+                  ],
                 ),
               );
             },

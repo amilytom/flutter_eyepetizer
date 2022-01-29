@@ -12,6 +12,7 @@ class ImageExends extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExtendedImage.network(
       imgUrl,
+      compressionRatio: 0.5,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       cache: true,

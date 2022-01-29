@@ -1,9 +1,10 @@
-// ignore_for_file: must_call_super, avoid_print
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+//
 import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
@@ -23,7 +24,6 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 Follow fromJsonFollow(dynamic response) => Follow.fromJson(response);
 Types fromJsonTypes(dynamic response) => Types.fromJson(response);
@@ -54,6 +54,7 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
   ];
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: _tabBodyList.length,
       child: Scaffold(
@@ -69,7 +70,7 @@ class _AppBarTabExploreState extends State<AppBarTabExplore>
             IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                PageRoutes.addRouter(routeName: PageName.SEARCH);
+                PageRoutes.addRouter(routeName: PageName.search);
               },
             ),
           ],
@@ -116,7 +117,7 @@ class FollowTabState extends State<FollowTab>
       Follow data = await compute(fromJsonFollow, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -133,7 +134,7 @@ class FollowTabState extends State<FollowTab>
     if (!mounted) {
       return;
     }
-    if (itemResponse.status == Status.COMPLETED) {
+    if (itemResponse.status == Status.completed) {
       setState(() {
         if (isReset) {
           _itemList = [];
@@ -143,19 +144,19 @@ class FollowTabState extends State<FollowTab>
         nextPageUrl = itemResponse.data!.nextPageUrl;
         _itemList.addAll(itemResponse.data!.itemList!);
       });
-    } else if (itemResponse.status == Status.ERROR) {
+    } else if (itemResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = itemResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar2 tab1 => 关注， url: $nextPageUrl");
+      // print("发生错误，位置home bottomBar2 tab1 => 关注， url: $nextPageUrl");
     }
   }
 
   void _setRefreshState(ApiResponse<Follow> res) {
     if (!mounted) return;
-    if (res.status == Status.COMPLETED && res.data!.nextPageUrl == null) {
+    if (res.status == Status.completed && res.data!.nextPageUrl == null) {
       _refreshController.loadNoData();
     } else {
       _refreshController.loadComplete();
@@ -192,6 +193,7 @@ class FollowTabState extends State<FollowTab>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Widget body;
     if (stateCode == 0) {
       body = const MyLoading(message: "加载中");
@@ -252,59 +254,58 @@ class FollowTabState extends State<FollowTab>
                   width: 260,
                   child: Column(
                     children: [
-                      VideoFactory(
-                        id: item.data!.id!.toString(),
-                        playUrl: item.data!.playUrl!,
-                        title: item.data!.title!,
-                        typeName: item.data!.category!,
-                        desText: item.data!.description!,
-                        subTime: DateTime.fromMillisecondsSinceEpoch(
-                                item.data!.releaseTime!)
-                            .toString()
-                            .substring(0, 19),
-                        avatarUrl: item.data!.author != null
-                            ? item.data!.author!.icon!
-                            : "",
-                        authorDes: item.data!.author != null
-                            ? item.data!.author!.description!
-                            : "",
-                        authorName: item.data!.author != null
-                            ? item.data!.author!.name!
-                            : "",
-                        videoPoster: curVideoItemPoster,
-                        child: SizedBox(
-                          height: 160,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                top: 0,
+                      SizedBox(
+                        height: 160,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              top: 0,
+                              child: VideoFactory(
+                                id: item.data!.id!.toString(),
+                                playUrl: item.data!.playUrl!,
+                                title: item.data!.title!,
+                                typeName: item.data!.category!,
+                                desText: item.data!.description!,
+                                subTime: DateTime.fromMillisecondsSinceEpoch(
+                                        item.data!.releaseTime!)
+                                    .toString()
+                                    .substring(0, 19),
+                                avatarUrl: item.data!.author != null
+                                    ? item.data!.author!.icon!
+                                    : "",
+                                authorDes: item.data!.author != null
+                                    ? item.data!.author!.description!
+                                    : "",
+                                authorName: item.data!.author != null
+                                    ? item.data!.author!.name!
+                                    : "",
+                                videoPoster: curVideoItemPoster,
                                 child: ImageExends(
                                   imgUrl: curVideoItemPoster,
                                 ),
                               ),
-                              Positioned(
-                                right: 10,
-                                top: 10,
-                                child: Container(
-                                  color:
-                                      const Color.fromRGBO(255, 255, 255, 0.9),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      curVideoItemCategory,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            Positioned(
+                              right: 10,
+                              top: 10,
+                              child: Container(
+                                color: const Color.fromRGBO(255, 255, 255, 0.9),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    curVideoItemCategory,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
@@ -458,7 +459,7 @@ class _TypesTabState extends State<TypesTab>
       Types data = await compute(fromJsonTypes, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -468,18 +469,18 @@ class _TypesTabState extends State<TypesTab>
     if (!mounted) {
       return;
     }
-    if (typeResponse.status == Status.COMPLETED) {
+    if (typeResponse.status == Status.completed) {
       setState(() {
         stateCode = 1;
         _typeList.addAll(typeResponse.data!.data!);
       });
-    } else if (typeResponse.status == Status.ERROR) {
+    } else if (typeResponse.status == Status.error) {
       setState(() {
         stateCode = 2;
       });
       String errMsg = typeResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar2 tab2 => 分类， url: $typesUrl");
+      // print("发生错误，位置home bottomBar2 tab2 => 分类， url: $typesUrl");
     }
   }
 
@@ -491,6 +492,7 @@ class _TypesTabState extends State<TypesTab>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Widget bodyView;
     if (stateCode == 0) {
       bodyView = const MyLoading(message: "加载中");
@@ -513,7 +515,7 @@ class _TypesTabState extends State<TypesTab>
             return GestureDetector(
               onTap: () {
                 PageRoutes.addRouter(
-                  routeName: PageName.TYPE_DETAILL,
+                  routeName: PageName.typeDetaill,
                   parameters: {
                     "headerImg": headerImg,
                     "typeName": curTypeName,
@@ -612,7 +614,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
       Reel data = await compute(fromJsonReel, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -629,7 +631,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
     if (!mounted) {
       return;
     }
-    if (reelResponse.status == Status.COMPLETED) {
+    if (reelResponse.status == Status.completed) {
       setState(() {
         if (isReset) {
           _reelList = [];
@@ -639,19 +641,19 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
         nextPageUrl = reelResponse.data!.nextPageUrl;
         _reelList.addAll(reelResponse.data!.itemList!);
       });
-    } else if (reelResponse.status == Status.ERROR) {
+    } else if (reelResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = reelResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar2 tab3 => 专题， url: $nextPageUrl");
+      // print("发生错误，位置home bottomBar2 tab3 => 专题， url: $nextPageUrl");
     }
   }
 
   void _setRefreshState(ApiResponse<Reel> res) {
     if (!mounted) return;
-    if (res.status == Status.COMPLETED && res.data!.nextPageUrl == null) {
+    if (res.status == Status.completed && res.data!.nextPageUrl == null) {
       _refreshController.loadNoData();
     } else {
       _refreshController.loadComplete();
@@ -688,6 +690,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Widget bodyView;
     if (stateCode == 0) {
       bodyView = const MyLoading(message: "加载中");
@@ -749,7 +752,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                         String queryTitle =
                             Uri.parse(enCodeUrl).queryParameters["title"]!;
                         PageRoutes.addRouter(
-                          routeName: PageName.REEL_DETAILL,
+                          routeName: PageName.reelDetaill,
                           parameters: {
                             "id": queryId,
                             "title": queryTitle,
@@ -757,7 +760,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                         );
                       }
                     } catch (err) {
-                      print(err);
+                      // print(err);
                       publicToast("发生错误");
                     }
                   },

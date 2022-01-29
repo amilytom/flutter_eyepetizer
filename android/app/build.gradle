@@ -52,7 +52,6 @@ android {
     // 打包发布key配置
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.flutter_eyepetizer"
         minSdkVersion 19
         targetSdkVersion 30
@@ -62,7 +61,6 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             // 打包放出注释 -----------
             // minifyEnabled true

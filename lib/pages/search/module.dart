@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_print, must_call_super
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_eyepetizer/components/image_extends.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 //
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
@@ -18,7 +18,6 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 VideoSearch fromJson(dynamic response) => VideoSearch.fromJson(response);
 
@@ -29,8 +28,7 @@ class VideoSearchPage extends StatefulWidget {
   _VideoSearchPageState createState() => _VideoSearchPageState();
 }
 
-class _VideoSearchPageState extends State<VideoSearchPage>
-    with AutomaticKeepAliveClientMixin {
+class _VideoSearchPageState extends State<VideoSearchPage> {
   int stateCode = 2;
   String curSearchVal = "";
   bool? isInit;
@@ -51,7 +49,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
       VideoSearch data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -68,7 +66,7 @@ class _VideoSearchPageState extends State<VideoSearchPage>
     if (!mounted) {
       return;
     }
-    if (searchResponse.status == Status.COMPLETED) {
+    if (searchResponse.status == Status.completed) {
       setState(() {
         if (isReset) {
           _itemList = [];
@@ -78,19 +76,19 @@ class _VideoSearchPageState extends State<VideoSearchPage>
         nextPageUrl = searchResponse.data!.nextPageUrl!;
         _itemList.addAll(searchResponse.data!.itemList!);
       });
-    } else if (searchResponse.status == Status.ERROR) {
+    } else if (searchResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 3;
       });
       String errMsg = searchResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置search， url: $nextPageUrl$curSearchVal");
+      // print("发生错误，位置search， url: $nextPageUrl$curSearchVal");
     }
   }
 
   void _setRefreshState(ApiResponse<VideoSearch> res) {
     if (!mounted) return;
-    if (res.status == Status.COMPLETED && res.data!.nextPageUrl == null) {
+    if (res.status == Status.completed && res.data!.nextPageUrl == null) {
       _refreshController.loadNoData();
     } else {
       _refreshController.loadComplete();
@@ -244,61 +242,61 @@ class _VideoSearchPageState extends State<VideoSearchPage>
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: Column(
                   children: [
-                    VideoFactory(
-                      id: _itemList[idx]!.data!.id!.toString(),
-                      playUrl: _itemList[idx]!.data!.playUrl!,
-                      title: _itemList[idx]!.data!.title!,
-                      typeName: _itemList[idx]!.data!.category!,
-                      desText: _itemList[idx]!.data!.description!,
-                      subTime: DateTime.fromMillisecondsSinceEpoch(
-                              _itemList[idx]!.data!.releaseTime!)
-                          .toString()
-                          .substring(0, 19),
-                      avatarUrl: _itemList[idx]!.data!.author != null
-                          ? _itemList[idx]!.data!.author!.icon!
-                          : "",
-                      authorDes: _itemList[idx]!.data!.author != null
-                          ? _itemList[idx]!.data!.author!.description!
-                          : "",
-                      authorName: _itemList[idx]!.data!.author != null
-                          ? _itemList[idx]!.data!.author!.name!
-                          : "",
-                      videoPoster: videoPoster,
-                      child: SizedBox(
-                        height: 210,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              top: 0,
+                    SizedBox(
+                      height: 210,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0,
+                            child: VideoFactory(
+                              id: _itemList[idx]!.data!.id!.toString(),
+                              playUrl: _itemList[idx]!.data!.playUrl!,
+                              title: _itemList[idx]!.data!.title!,
+                              typeName: _itemList[idx]!.data!.category!,
+                              desText: _itemList[idx]!.data!.description!,
+                              subTime: DateTime.fromMillisecondsSinceEpoch(
+                                      _itemList[idx]!.data!.releaseTime!)
+                                  .toString()
+                                  .substring(0, 19),
+                              avatarUrl: _itemList[idx]!.data!.author != null
+                                  ? _itemList[idx]!.data!.author!.icon!
+                                  : "",
+                              authorDes: _itemList[idx]!.data!.author != null
+                                  ? _itemList[idx]!.data!.author!.description!
+                                  : "",
+                              authorName: _itemList[idx]!.data!.author != null
+                                  ? _itemList[idx]!.data!.author!.name!
+                                  : "",
+                              videoPoster: videoPoster,
                               child: ImageExends(
                                 imgUrl: videoPoster,
                               ),
                             ),
-                            Positioned(
-                              left: 10,
-                              top: 10,
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                alignment: Alignment.center,
-                                decoration: const BoxDecoration(
-                                  color: Color.fromRGBO(0, 0, 0, 0.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(25),
-                                  ),
-                                ),
-                                child: Text(
-                                  videoCategory,
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                          ),
+                          Positioned(
+                            left: 10,
+                            top: 10,
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: Color.fromRGBO(0, 0, 0, 0.5),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(25),
                                 ),
                               ),
+                              child: Text(
+                                videoCategory,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     VideoBanner(
@@ -378,7 +376,4 @@ class _VideoSearchPageState extends State<VideoSearchPage>
     }
     return body;
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

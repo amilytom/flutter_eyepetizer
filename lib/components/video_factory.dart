@@ -1,4 +1,3 @@
-// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_eyepetizer/router/index.dart';
 import 'package:get/get.dart';
@@ -17,8 +16,8 @@ class VideoFactory extends StatelessWidget {
   final Widget child;
   final bool isPopCurRoute;
   final bool isHero;
-  Function? routerPopEnter;
-  VideoFactory({
+  final Function? routerPopEnter;
+  const VideoFactory({
     Key? key,
     required this.id,
     required this.playUrl,
@@ -45,7 +44,7 @@ class VideoFactory extends StatelessWidget {
           Get.back();
         }
         PageRoutes.addRouter(
-          routeName: PageName.VIDEO_DETAILL,
+          routeName: PageName.videoDetaill,
           parameters: {
             "id": id,
             "playUrl": playUrl,

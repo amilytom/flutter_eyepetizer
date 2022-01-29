@@ -1,14 +1,16 @@
-// ignore_for_file: unnecessary_brace_in_string_interps, must_call_super, non_constant_identifier_names, avoid_print
 import 'dart:async';
 import 'dart:ui';
 //
-import 'package:dio/dio.dart';
-import 'package:better_video_player/better_video_player.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_eyepetizer/components/image_extends.dart';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:fijkplayer/fijkplayer.dart';
+// skin
+import 'package:flutter_eyepetizer/fijkplayer_skin/fijkplayer_skin.dart';
 //
+import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
 //
@@ -25,7 +27,19 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 //
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:get/get.dart';
+
+class PlayerShowConfig implements ShowConfigAbs {
+  @override
+  bool speedBtn = true;
+  @override
+  bool topBar = true;
+  @override
+  bool lockBtn = true;
+  @override
+  bool bottomPro = true;
+  @override
+  bool stateAuto = true;
+}
 
 VideoRelated fromJson(dynamic response) => VideoRelated.fromJson(response);
 
@@ -36,43 +50,50 @@ class VideoDetaill extends StatefulWidget {
   _VideoDetaillState createState() => _VideoDetaillState();
 }
 
-class _VideoDetaillState extends State<VideoDetaill>
-    with AutomaticKeepAliveClientMixin {
-  final BetterVideoPlayerController controller = BetterVideoPlayerController();
+class _VideoDetaillState extends State<VideoDetaill> {
   //
-  bool isShowPlayer = false;
+  bool isInitAnimition = false;
   //
-  String curPlayUrl = Get.parameters["playUrl"]!;
-  String videoId = Get.parameters["id"]!;
-  String title = Get.parameters["title"]!;
-  String typeName = Get.parameters["typeName"]!;
-  String desText = Get.parameters["desText"]!;
-  String subTime = Get.parameters["subTime"]!;
-  String avatarUrl = Get.parameters["avatarUrl"]!;
-  String authorDes = Get.parameters["authorDes"]!;
-  String authorName = Get.parameters["authorName"]!;
-  String videoPoster = Get.parameters["videoPoster"]!;
-  bool isNotAuthor = Get.parameters["avatarUrl"]!.isEmpty ? true : false;
+  String? curPlayUrl = Get.parameters["playUrl"];
+  String? videoId = Get.parameters["id"];
+  String? title = Get.parameters["title"];
+  String? typeName = Get.parameters["typeName"];
+  String? desText = Get.parameters["desText"];
+  String? subTime = Get.parameters["subTime"];
+  String? avatarUrl = Get.parameters["avatarUrl"];
+  String? authorDes = Get.parameters["authorDes"];
+  String? authorName = Get.parameters["authorName"];
+  String? videoPoster = Get.parameters["videoPoster"];
+  bool isNotAuthor = Get.parameters["avatarUrl"] == null ? true : false;
+  //
+  final double playerBoxWidth = 260;
 
   // 全局控制器
   HistoryService historyService = Get.put(HistoryService());
 
-  @override
-  void initState() {
-    super.initState();
+  final FijkPlayer player = FijkPlayer();
+  ShowConfigAbs vSkinCfg = PlayerShowConfig();
+
+  Future<void> initEvent() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     // 加入历史记录
     historyService.add(
-      id: videoId,
-      playUrl: curPlayUrl,
-      title: title,
-      typeName: typeName,
-      desText: desText,
-      subTime: subTime,
-      avatarUrl: avatarUrl,
-      authorDes: authorDes,
-      authorName: authorName,
-      videoPoster: videoPoster,
+      id: videoId ?? "",
+      playUrl: curPlayUrl ?? "",
+      title: title ?? "",
+      typeName: typeName ?? "",
+      desText: desText ?? "",
+      subTime: subTime ?? "",
+      avatarUrl: avatarUrl ?? "",
+      authorDes: authorDes ?? "",
+      authorName: authorName ?? "",
+      videoPoster: videoPoster ?? "",
     );
+    setState(() {
+      // 设置播放源
+      player.setDataSource(curPlayUrl ?? "", autoPlay: true);
+      isInitAnimition = true;
+    });
     // if (Platform.isAndroid) {
     //   //设置Android头部的导航栏透明
     //   SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
@@ -86,9 +107,15 @@ class _VideoDetaillState extends State<VideoDetaill>
   }
 
   @override
-  void dispose() {
-    controller.pause();
-    controller.dispose();
+  void initState() {
+    super.initState();
+    initEvent();
+  }
+
+  @override
+  void dispose() async {
+    await player.stop();
+    player.dispose();
     super.dispose();
   }
 
@@ -101,44 +128,75 @@ class _VideoDetaillState extends State<VideoDetaill>
             height: MediaQueryData.fromWindow(window).padding.top,
             color: Colors.black,
           ),
-          Hero(
-            tag: videoId,
-            child: AspectRatio(
-              aspectRatio: 16.0 / 9.0,
-              child: BetterVideoPlayer(
-                controller: controller,
-                configuration: BetterVideoPlayerConfiguration(
-                  placeholder: Image.network(
-                    videoPoster,
-                    fit: BoxFit.contain,
+          Container(
+            height: playerBoxWidth,
+            color: Colors.black,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  top: 0,
+                  child: Hero(
+                    tag: videoId!,
+                    child: Container(
+                      height: playerBoxWidth,
+                      color: Colors.black,
+                      child: Image(
+                        image: NetworkImage(videoPoster!),
+                      ),
+                    ),
                   ),
                 ),
-                dataSource: BetterVideoPlayerDataSource(
-                  BetterVideoPlayerDataSourceType.network,
-                  curPlayUrl,
-                ),
-              ),
+                !isInitAnimition
+                    ? Container(
+                        height: playerBoxWidth,
+                        color: Colors.black,
+                      )
+                    : FijkView(
+                        height: playerBoxWidth,
+                        color: Colors.black,
+                        fit: FijkFit.cover,
+                        player: player,
+                        panelBuilder: (
+                          FijkPlayer player,
+                          FijkData data,
+                          BuildContext context,
+                          Size viewSize,
+                          Rect texturePos,
+                        ) {
+                          /// 使用自定义的布局
+                          return CustomFijkPanel(
+                            player: player,
+                            viewSize: viewSize,
+                            texturePos: texturePos,
+                            pageContent: context,
+                            playerTitle: title ?? "",
+                            showConfig: vSkinCfg,
+                            curPlayUrl: curPlayUrl ?? "",
+                          );
+                        },
+                      ),
+              ],
             ),
           ),
           VideoInfo(
-            id: videoId,
-            title: title,
-            typeName: typeName,
-            desText: desText,
-            subTime: subTime,
-            avatarUrl: avatarUrl,
-            authorDes: authorDes,
-            authorName: authorName,
+            id: videoId ?? "",
+            title: title ?? "",
+            typeName: typeName ?? "",
+            desText: desText ?? "",
+            subTime: subTime ?? "",
+            avatarUrl: avatarUrl ?? "",
+            authorDes: authorDes ?? "",
+            authorName: authorName ?? "",
             isNotAuthor: isNotAuthor,
-            player: controller,
+            // player: controller,
           ),
         ],
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class VideoInfo extends StatefulWidget {
@@ -151,7 +209,6 @@ class VideoInfo extends StatefulWidget {
   final String authorName;
   final String authorDes;
   final bool isNotAuthor;
-  final BetterVideoPlayerController player;
   const VideoInfo({
     Key? key,
     required this.id,
@@ -163,18 +220,16 @@ class VideoInfo extends StatefulWidget {
     required this.authorName,
     required this.authorDes,
     required this.isNotAuthor,
-    required this.player,
   }) : super(key: key);
 
   @override
-  _VideoInfoState createState() => _VideoInfoState();
+  VideoInfoState createState() => VideoInfoState();
 }
 
-class _VideoInfoState extends State<VideoInfo>
-    with AutomaticKeepAliveClientMixin {
+class VideoInfoState extends State<VideoInfo> {
   String get id => widget.id;
   bool get isNotAuthor => widget.isNotAuthor;
-  BetterVideoPlayerController get player => widget.player;
+  // BetterVideoPlayerController get player => widget.player;
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
   String nextPageUrl = Api.getRelatedData;
@@ -182,12 +237,12 @@ class _VideoInfoState extends State<VideoInfo>
 
   Future<ApiResponse<VideoRelated>> getVideoRelatedData() async {
     try {
-      dynamic response = await HttpUtils.get('${nextPageUrl}?id=${id}');
+      dynamic response = await HttpUtils.get('$nextPageUrl?id=$id');
       // print(response);
       VideoRelated data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -197,19 +252,19 @@ class _VideoInfoState extends State<VideoInfo>
     if (!mounted) {
       return;
     }
-    if (relatedResponse.status == Status.COMPLETED) {
+    if (relatedResponse.status == Status.completed) {
       setState(() {
         stateCode = 1;
         _itemList.addAll(relatedResponse.data!.itemList ?? []);
-        print(relatedResponse.data!.itemList);
+        // print(relatedResponse.data!.itemList);
       });
-    } else if (relatedResponse.status == Status.ERROR) {
+    } else if (relatedResponse.status == Status.error) {
       setState(() {
         stateCode = 2;
       });
       String errMsg = relatedResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置video_detaill， url: ${nextPageUrl}?id=${id}");
+      // print("发生错误，位置video_detaill， url: $nextPageUrl?id=$id");
     }
   }
 
@@ -313,7 +368,7 @@ class _VideoInfoState extends State<VideoInfo>
                   videoPoster: e.data!.cover!.feed!,
                   isPopCurRoute: true,
                   routerPopEnter: () async {
-                    await player.pause();
+                    // await player.pause();
                   },
                   child: Container(
                     decoration: const BoxDecoration(
@@ -397,7 +452,4 @@ class _VideoInfoState extends State<VideoInfo>
       child: bodyView,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

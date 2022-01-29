@@ -23,7 +23,7 @@ class HttpUtils {
     Options? options,
     CancelToken? cancelToken,
     bool refresh = false,
-    bool noCache = !CACHE_ENABLE,
+    bool noCache = !cacheEnable,
     String? cacheKey,
     bool cacheDisk = false,
   }) async {

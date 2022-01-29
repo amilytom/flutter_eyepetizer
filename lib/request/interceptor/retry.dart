@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_renaming_method_parameters
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -64,7 +63,7 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
   });
 
   @override
-  dynamic onError(DioError err, ErrorInterceptorHandler errFn) async {
+  dynamic onError(DioError err, ErrorInterceptorHandler handler) async {
     if (_shouldRetry(err)) {
       try {
         return requestRetrier.scheduleRequestRetry(err.requestOptions);
@@ -72,7 +71,7 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
         return e;
       }
     }
-    return super.onError(err, errFn);
+    return super.onError(err, handler);
   }
 
   bool _shouldRetry(DioError err) {

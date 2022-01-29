@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +27,7 @@ Future<void> initStore() async {
   // 历史记录，全局
   await Get.putAsync(() => HistoryService().init());
   // 全局注入
-  print("全局注入");
+  // print("全局注入");
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: PageRoutes.INIT_ROUTER,
+      initialRoute: PageRoutes.initRoute,
       getPages: PageRoutes.routes,
     );
   }

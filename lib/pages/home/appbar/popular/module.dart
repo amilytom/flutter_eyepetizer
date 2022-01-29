@@ -1,9 +1,10 @@
-// ignore_for_file: must_call_super, prefer_const_constructors, avoid_print
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+//
 import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
@@ -21,7 +22,6 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 PopularColl fromJson(dynamic response) => PopularColl.fromJson(response);
 
@@ -47,6 +47,7 @@ class _AppBarTabPopularState extends State<AppBarTabPopular>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: tabUrlList.length,
       child: Scaffold(
@@ -55,13 +56,13 @@ class _AppBarTabPopularState extends State<AppBarTabPopular>
           leading: Container(),
           title: Container(
             alignment: Alignment.center,
-            child: Text("热门"),
+            child: const Text("热门"),
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () {
-                PageRoutes.addRouter(routeName: PageName.SEARCH);
+                PageRoutes.addRouter(routeName: PageName.search);
               },
             ),
           ],
@@ -110,7 +111,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
       PopularColl data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -128,7 +129,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
     if (!mounted) {
       return;
     }
-    if (itemResponse.status == Status.COMPLETED) {
+    if (itemResponse.status == Status.completed) {
       setState(() {
         if (isReset) {
           _itemList = [];
@@ -138,19 +139,19 @@ class _TabBarItemCartState extends State<TabBarItemCart>
         nextPageUrl = itemResponse.data!.nextPageUrl;
         _itemList.addAll(itemResponse.data!.itemList!);
       });
-    } else if (itemResponse.status == Status.ERROR) {
+    } else if (itemResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = itemResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置home bottomBar3 => 热门， url: $nextPageUrl");
+      // print("发生错误，位置home bottomBar3 => 热门， url: $nextPageUrl");
     }
   }
 
   void _setRefreshState(ApiResponse<PopularColl> res) {
     if (!mounted) return;
-    if (res.status == Status.COMPLETED && res.data!.nextPageUrl == null) {
+    if (res.status == Status.completed && res.data!.nextPageUrl == null) {
       _refreshController.loadNoData();
     } else {
       _refreshController.loadComplete();
@@ -187,9 +188,10 @@ class _TabBarItemCartState extends State<TabBarItemCart>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Widget body;
     if (stateCode == 0) {
-      body = MyLoading(message: "加载中");
+      body = const MyLoading(message: "加载中");
     } else if (stateCode == 1) {
       body = SmartRefresher(
         enablePullDown: true,
@@ -198,7 +200,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
           builder: (context, mode) {
             Widget? body;
             if (mode == LoadStatus.idle) {
-              body = Text("上拉加载");
+              body = const Text("上拉加载");
             } else if (mode == LoadStatus.loading) {
               body = Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -213,11 +215,11 @@ class _TabBarItemCartState extends State<TabBarItemCart>
                 ],
               );
             } else if (mode == LoadStatus.failed) {
-              body = Text("加载失败！点击重试！");
+              body = const Text("加载失败！点击重试！");
             } else if (mode == LoadStatus.canLoading) {
-              body = Text("松手,加载更多！");
+              body = const Text("松手,加载更多！");
             } else if (mode == LoadStatus.noMore) {
-              body = Text("没有更多数据了！");
+              body = const Text("没有更多数据了！");
             }
             return SizedBox(
               height: 55.0,
@@ -235,64 +237,65 @@ class _TabBarItemCartState extends State<TabBarItemCart>
             // String authorName = _itemList[idx]!.data!.author!.name!;
             String videoPoster = _itemList[idx]!.data!.cover!.feed!;
             return Padding(
-              padding: EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 10),
+              padding: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: 0, top: 10),
               child: Column(
                 children: [
-                  VideoFactory(
-                    id: _itemList[idx]!.data!.id!.toString(),
-                    playUrl: _itemList[idx]!.data!.playUrl!,
-                    title: _itemList[idx]!.data!.title!,
-                    typeName: _itemList[idx]!.data!.category!,
-                    desText: _itemList[idx]!.data!.description!,
-                    subTime: DateTime.fromMillisecondsSinceEpoch(
-                            _itemList[idx]!.data!.releaseTime!)
-                        .toString()
-                        .substring(0, 19),
-                    avatarUrl: _itemList[idx]!.data!.author != null
-                        ? _itemList[idx]!.data!.author!.icon!
-                        : "",
-                    authorDes: _itemList[idx]!.data!.author != null
-                        ? _itemList[idx]!.data!.author!.description!
-                        : "",
-                    authorName: _itemList[idx]!.data!.author != null
-                        ? _itemList[idx]!.data!.author!.name!
-                        : "",
-                    videoPoster: videoPoster,
-                    child: SizedBox(
-                      height: 210,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            top: 0,
+                  SizedBox(
+                    height: 210,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          top: 0,
+                          child: VideoFactory(
+                            id: _itemList[idx]!.data!.id!.toString(),
+                            playUrl: _itemList[idx]!.data!.playUrl!,
+                            title: _itemList[idx]!.data!.title!,
+                            typeName: _itemList[idx]!.data!.category!,
+                            desText: _itemList[idx]!.data!.description!,
+                            subTime: DateTime.fromMillisecondsSinceEpoch(
+                                    _itemList[idx]!.data!.releaseTime!)
+                                .toString()
+                                .substring(0, 19),
+                            avatarUrl: _itemList[idx]!.data!.author != null
+                                ? _itemList[idx]!.data!.author!.icon!
+                                : "",
+                            authorDes: _itemList[idx]!.data!.author != null
+                                ? _itemList[idx]!.data!.author!.description!
+                                : "",
+                            authorName: _itemList[idx]!.data!.author != null
+                                ? _itemList[idx]!.data!.author!.name!
+                                : "",
+                            videoPoster: videoPoster,
                             child: ImageExends(
                               imgUrl: videoPoster,
                             ),
                           ),
-                          Positioned(
-                            left: 10,
-                            top: 10,
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Color.fromRGBO(0, 0, 0, 0.5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(25),
-                                ),
-                              ),
-                              child: Text(
-                                videoCategory,
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                        ),
+                        Positioned(
+                          left: 10,
+                          top: 10,
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              color: Color.fromRGBO(0, 0, 0, 0.5),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25),
                               ),
                             ),
+                            child: Text(
+                              videoCategory,
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.white),
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   VideoBanner(
@@ -305,7 +308,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
                         ? "暂无"
                         : _itemList[idx]!.data!.author!.name!,
                     slotChild: MyIconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.share,
                         size: 30,
                         color: Colors.black54,
@@ -313,10 +316,10 @@ class _TabBarItemCartState extends State<TabBarItemCart>
                       cb: () {},
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
-                  Divider(
+                  const Divider(
                     height: 1,
                     color: Colors.black12,
                   ),
@@ -341,7 +344,7 @@ class _TabBarItemCartState extends State<TabBarItemCart>
           // 重新加载
           await _refresh();
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.new_releases,
           size: 100,
           color: Colors.red,
@@ -358,11 +361,11 @@ class _TabBarItemCartState extends State<TabBarItemCart>
               onPressed: () {
                 _scrollController.animateTo(
                   .0,
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                   curve: Curves.ease,
                 );
               },
-              child: Icon(Icons.arrow_upward),
+              child: const Icon(Icons.arrow_upward),
             )
           : null,
       body: body,

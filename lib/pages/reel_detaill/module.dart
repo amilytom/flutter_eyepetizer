@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print, must_call_super, must_be_immutable
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:get/get.dart';
+//
 import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 //
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:get/get.dart';
 
 ReelInfo fromJson(dynamic response) => ReelInfo.fromJson(response);
 
@@ -29,8 +29,7 @@ class ReelDetaill extends StatefulWidget {
   _ReelDetaillState createState() => _ReelDetaillState();
 }
 
-class _ReelDetaillState extends State<ReelDetaill>
-    with AutomaticKeepAliveClientMixin {
+class _ReelDetaillState extends State<ReelDetaill> {
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
   ReelInfo? reelInfo;
@@ -45,7 +44,7 @@ class _ReelDetaillState extends State<ReelDetaill>
       ReelInfo data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -57,18 +56,18 @@ class _ReelDetaillState extends State<ReelDetaill>
     if (!mounted) {
       return;
     }
-    if (reelInfoResponse.status == Status.COMPLETED) {
+    if (reelInfoResponse.status == Status.completed) {
       setState(() {
         stateCode = 1;
         reelInfo = reelInfoResponse.data;
       });
-    } else if (reelInfoResponse.status == Status.ERROR) {
+    } else if (reelInfoResponse.status == Status.error) {
       setState(() {
         stateCode = 2;
       });
       String errMsg = reelInfoResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置reel_detaill， url: $initPageUrl");
+      // print("发生错误，位置reel_detaill， url: $initPageUrl");
     }
   }
 
@@ -133,16 +132,13 @@ class _ReelDetaillState extends State<ReelDetaill>
       body: bodyView,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class Header extends StatelessWidget {
-  String? bgImg;
-  String? title;
-  String? desText;
-  Header({
+  final String? bgImg;
+  final String? title;
+  final String? desText;
+  const Header({
     Key? key,
     this.bgImg,
     this.title,
@@ -234,8 +230,8 @@ class Header extends StatelessWidget {
 }
 
 class CollList extends StatelessWidget {
-  List<ReelInfoItemList?>? children;
-  CollList({Key? key, this.children}) : super(key: key);
+  final List<ReelInfoItemList?>? children;
+  const CollList({Key? key, this.children}) : super(key: key);
 
   Widget _buildContextWidget() {
     if (children!.isEmpty) {
@@ -301,28 +297,28 @@ class CollList extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    VideoFactory(
-                      id: e.id!.toString(),
-                      playUrl: e.data!.content!.data!.playUrl!,
-                      title: e.data!.content!.data!.title!,
-                      typeName: e.data!.content!.data!.category!,
-                      desText: e.data!.content!.data!.description!,
-                      subTime: DateTime.fromMillisecondsSinceEpoch(
-                              e.data!.content!.data!.releaseTime!)
-                          .toString()
-                          .substring(0, 19),
-                      avatarUrl: e.data!.content!.data!.author != null
-                          ? e.data!.content!.data!.author!.icon!
-                          : "",
-                      authorDes: e.data!.content!.data!.author != null
-                          ? e.data!.content!.data!.author!.description!
-                          : "",
-                      authorName: e.data!.content!.data!.author != null
-                          ? e.data!.content!.data!.author!.name!
-                          : "",
-                      videoPoster: videoPoster,
-                      child: SizedBox(
-                        height: 210,
+                    SizedBox(
+                      height: 210,
+                      child: VideoFactory(
+                        id: e.id!.toString(),
+                        playUrl: e.data!.content!.data!.playUrl!,
+                        title: e.data!.content!.data!.title!,
+                        typeName: e.data!.content!.data!.category!,
+                        desText: e.data!.content!.data!.description!,
+                        subTime: DateTime.fromMillisecondsSinceEpoch(
+                                e.data!.content!.data!.releaseTime!)
+                            .toString()
+                            .substring(0, 19),
+                        avatarUrl: e.data!.content!.data!.author != null
+                            ? e.data!.content!.data!.author!.icon!
+                            : "",
+                        authorDes: e.data!.content!.data!.author != null
+                            ? e.data!.content!.data!.author!.description!
+                            : "",
+                        authorName: e.data!.content!.data!.author != null
+                            ? e.data!.content!.data!.author!.name!
+                            : "",
+                        videoPoster: videoPoster,
                         child: ImageExends(
                           imgUrl: videoPoster,
                         ),

@@ -1,12 +1,11 @@
-// ignore_for_file: must_call_super, must_be_immutable
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:share_extend/share_extend.dart';
+import 'package:url_launcher/url_launcher.dart';
 //
 import 'package:flutter_eyepetizer/router/index.dart';
 import 'package:flutter_eyepetizer/utils/config.dart';
-import 'package:share_extend/share_extend.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AppBarTabUser extends StatefulWidget {
   const AppBarTabUser({Key? key}) : super(key: key);
@@ -35,7 +34,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       "icon": Icons.history,
       "icoColor": Colors.amber[800],
       "cb": () {
-        PageRoutes.addRouter(routeName: PageName.VIDEO_HISTORY);
+        PageRoutes.addRouter(routeName: PageName.videoHistory);
       },
     },
     {
@@ -53,13 +52,14 @@ class _AppBarTabUserState extends State<AppBarTabUser>
       "icon": Icons.feedback,
       "icoColor": Colors.blue[800],
       "cb": () {
-        PageRoutes.addRouter(routeName: PageName.USER_DECLARE);
+        PageRoutes.addRouter(routeName: PageName.userDeclare);
       },
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 8.0,
@@ -90,7 +90,7 @@ class _AppBarTabUserState extends State<AppBarTabUser>
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    "开不开眼？",
+                    "开不开眼",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,

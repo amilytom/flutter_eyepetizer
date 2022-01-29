@@ -1,9 +1,11 @@
-// ignore_for_file: avoid_print, unnecessary_null_comparison, must_call_super
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+//
 import 'package:flutter_eyepetizer/components/image_extends.dart';
 import 'package:flutter_eyepetizer/components/video_banner.dart';
 import 'package:flutter_eyepetizer/components/video_factory.dart';
@@ -20,8 +22,6 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 import 'package:flutter_eyepetizer/widget/my_button.dart';
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
-import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 TypeInfo fromJson(dynamic response) => TypeInfo.fromJson(response);
 
@@ -32,8 +32,7 @@ class TypeDetaill extends StatefulWidget {
   _TypeDetaillState createState() => _TypeDetaillState();
 }
 
-class _TypeDetaillState extends State<TypeDetaill>
-    with AutomaticKeepAliveClientMixin {
+class _TypeDetaillState extends State<TypeDetaill> {
   bool? isInit;
   // 0加载中 1加载成功 2 失败
   int stateCode = 0;
@@ -59,7 +58,7 @@ class _TypeDetaillState extends State<TypeDetaill>
       TypeInfo data = await compute(fromJson, response);
       return ApiResponse.completed(data);
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       return ApiResponse.error(e.error);
     }
   }
@@ -72,26 +71,26 @@ class _TypeDetaillState extends State<TypeDetaill>
     if (!mounted) {
       return;
     }
-    if (typeInfoResponse.status == Status.COMPLETED) {
+    if (typeInfoResponse.status == Status.completed) {
       setState(() {
         isInit = isInit ?? true;
         stateCode = 1;
         nextPageUrl = typeInfoResponse.data!.nextPageUrl;
         _itemList.addAll(typeInfoResponse.data!.itemList!);
       });
-    } else if (typeInfoResponse.status == Status.ERROR) {
+    } else if (typeInfoResponse.status == Status.error) {
       setState(() {
         stateCode = isInit == true ? 1 : 2;
       });
       String errMsg = typeInfoResponse.exception!.getMessage();
       publicToast(errMsg);
-      print("发生错误，位置type_detaill， url: $nextPageUrl");
+      // print("发生错误，位置type_detaill， url: $nextPageUrl");
     }
   }
 
   void _setRefreshState(ApiResponse<TypeInfo> res) {
     if (!mounted) return;
-    if (res.status == Status.COMPLETED && res.data!.nextPageUrl == null) {
+    if (res.status == Status.completed && res.data!.nextPageUrl == null) {
       _refreshController.loadNoData();
     } else {
       _refreshController.loadComplete();
@@ -146,7 +145,7 @@ class _TypeDetaillState extends State<TypeDetaill>
           delegate: SliverChildBuilderDelegate(
             (ctx, idx) {
               bool isNotExistAuthor =
-                  _itemList[idx]!.data!.author! == null ? true : false;
+                  _itemList[idx]!.data!.author == null ? true : false;
               String videoPoster = _itemList[idx]!.data!.cover!.feed!;
               String videoCategory = _itemList[idx]!.data!.category!;
               String videoTitle = _itemList[idx]!.data!.title!;
@@ -161,61 +160,61 @@ class _TypeDetaillState extends State<TypeDetaill>
                 ),
                 child: Column(
                   children: [
-                    VideoFactory(
-                      id: _itemList[idx]!.data!.id!.toString(),
-                      playUrl: _itemList[idx]!.data!.playUrl!,
-                      title: _itemList[idx]!.data!.title!,
-                      typeName: _itemList[idx]!.data!.category!,
-                      desText: _itemList[idx]!.data!.description!,
-                      subTime: DateTime.fromMillisecondsSinceEpoch(
-                              _itemList[idx]!.data!.releaseTime!)
-                          .toString()
-                          .substring(0, 19),
-                      avatarUrl: _itemList[idx]!.data!.author != null
-                          ? _itemList[idx]!.data!.author!.icon!
-                          : "",
-                      authorDes: _itemList[idx]!.data!.author != null
-                          ? _itemList[idx]!.data!.author!.description!
-                          : "",
-                      authorName: _itemList[idx]!.data!.author != null
-                          ? _itemList[idx]!.data!.author!.name!
-                          : "",
-                      videoPoster: videoPoster,
-                      child: SizedBox(
-                        height: 210,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              top: 0,
+                    SizedBox(
+                      height: 210,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0,
+                            child: VideoFactory(
+                              id: _itemList[idx]!.data!.id!.toString(),
+                              playUrl: _itemList[idx]!.data!.playUrl!,
+                              title: _itemList[idx]!.data!.title!,
+                              typeName: _itemList[idx]!.data!.category!,
+                              desText: _itemList[idx]!.data!.description!,
+                              subTime: DateTime.fromMillisecondsSinceEpoch(
+                                      _itemList[idx]!.data!.releaseTime!)
+                                  .toString()
+                                  .substring(0, 19),
+                              avatarUrl: _itemList[idx]!.data!.author != null
+                                  ? _itemList[idx]!.data!.author!.icon!
+                                  : "",
+                              authorDes: _itemList[idx]!.data!.author != null
+                                  ? _itemList[idx]!.data!.author!.description!
+                                  : "",
+                              authorName: _itemList[idx]!.data!.author != null
+                                  ? _itemList[idx]!.data!.author!.name!
+                                  : "",
+                              videoPoster: videoPoster,
                               child: ImageExends(
                                 imgUrl: videoPoster,
                               ),
                             ),
-                            Positioned(
-                              left: 10,
-                              top: 10,
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                alignment: Alignment.center,
-                                decoration: const BoxDecoration(
-                                  color: Color.fromRGBO(0, 0, 0, 0.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(25),
-                                  ),
-                                ),
-                                child: Text(
-                                  videoCategory,
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                          ),
+                          Positioned(
+                            left: 10,
+                            top: 10,
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: Color.fromRGBO(0, 0, 0, 0.5),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(25),
                                 ),
                               ),
+                              child: Text(
+                                videoCategory,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     VideoBanner(
@@ -341,7 +340,4 @@ class _TypeDetaillState extends State<TypeDetaill>
           : null,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

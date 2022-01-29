@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:flutter/material.dart';
 
 class VideoBanner extends StatelessWidget {
@@ -7,7 +6,7 @@ class VideoBanner extends StatelessWidget {
   final String rowDes;
   final Widget slotChild;
   final bool isAssets;
-  VideoBanner({
+  const VideoBanner({
     Key? key,
     required this.avatarUrl,
     required this.rowTitle,

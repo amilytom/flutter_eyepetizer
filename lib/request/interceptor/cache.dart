@@ -1,11 +1,9 @@
-// ignore_for_file: constant_identifier_names, avoid_renaming_method_parameters
-import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:flutter_eyepetizer/utils/storage.dart';
 
-const int CACHE_MAXAGE = 86400000;
-const int CACHE_MAXCOUNT = 1000;
-const bool CACHE_ENABLE = false;
+const int cacheMaxAge = 86400000;
+const int cacheMaxCount = 1000;
+const bool cacheEnable = false;
 
 class CacheObject {
   CacheObject(this.response)
@@ -24,16 +22,15 @@ class CacheObject {
 
 class NetCacheInterceptor extends Interceptor {
   // 为确保迭代器顺序和对象插入时间一致顺序一致，我们使用LinkedHashMap
-  // ignore: prefer_collection_literals
-  var cache = LinkedHashMap<String, CacheObject>();
+  var cache = <String, CacheObject>{};
 
   @override
   void onRequest(
     RequestOptions options,
-    RequestInterceptorHandler requestCb,
+    RequestInterceptorHandler handler,
   ) async {
-    if (!CACHE_ENABLE) {
-      return super.onRequest(options, requestCb);
+    if (!cacheEnable) {
+      return super.onRequest(options, handler);
     }
 
     // refresh标记是否是刷新缓存
@@ -67,7 +64,7 @@ class NetCacheInterceptor extends Interceptor {
       if (ob != null) {
         //若缓存未过期，则返回缓存内容
         if ((DateTime.now().millisecondsSinceEpoch - ob.timeStamp) / 1000 <
-            CACHE_MAXAGE) {
+            cacheMaxAge) {
           return;
         } else {
           //若已过期则删除缓存，继续向服务器请求
@@ -83,17 +80,16 @@ class NetCacheInterceptor extends Interceptor {
         }
       }
     }
-    return super.onRequest(options, requestCb);
+    return super.onRequest(options, handler);
   }
 
   @override
-  void onResponse(
-      Response response, ResponseInterceptorHandler responseCb) async {
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
     // 如果启用缓存，将返回结果保存到缓存
-    if (CACHE_ENABLE) {
+    if (cacheEnable) {
       await _saveCache(response);
     }
-    return super.onResponse(response, responseCb);
+    return super.onResponse(response, handler);
   }
 
   Future<void> _saveCache(Response object) async {
@@ -114,7 +110,7 @@ class NetCacheInterceptor extends Interceptor {
 
       // 内存缓存
       // 如果缓存数量超过最大数量限制，则先移除最早的一条记录
-      if (cache.length == CACHE_MAXCOUNT) {
+      if (cache.length == cacheMaxCount) {
         cache.remove(cache[cache.keys.first]);
       }
 

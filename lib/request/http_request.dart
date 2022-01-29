@@ -1,7 +1,7 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_eyepetizer/request/interceptor/cache.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 // 拦截器
+import 'package:flutter_eyepetizer/request/interceptor/cache.dart';
 import 'package:flutter_eyepetizer/request/interceptor/error.dart';
 import 'package:flutter_eyepetizer/request/interceptor/request.dart';
 import 'package:flutter_eyepetizer/request/interceptor/retry.dart';
@@ -106,7 +106,7 @@ class Http {
     Options? options,
     CancelToken? cancelToken,
     bool refresh = false,
-    bool noCache = !CACHE_ENABLE,
+    bool noCache = !cacheEnable,
     String? cacheKey,
     bool cacheDisk = false,
   }) async {

@@ -1,4 +1,3 @@
-// ignore_for_file: must_call_super, non_constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // appbar view
@@ -16,12 +15,12 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
+class _HomeState extends State<Home> {
   DateTime? lastPopTime;
   int _curPage = 0;
   final _pageController = PageController(initialPage: 0);
 
-  final List<Widget> _TabBarBodyItems = [
+  final List<Widget> tabBarBodyItems = [
     const AppBarTabHome(),
     const AppBarTabExplore(),
     const AppBarTabPopular(),
@@ -58,7 +57,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: _TabBarBodyItems,
+          children: tabBarBodyItems,
         ),
       ),
       onWillPop: () async {
@@ -79,7 +78,4 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       },
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

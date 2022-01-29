@@ -80,7 +80,6 @@ class AppException implements Exception {
                 }
               default:
                 {
-                  // return ErrorEntity(code: errCode, message: "未知错误");
                   return AppException(errCode!, error.response!.statusMessage!);
                 }
             }
@@ -90,7 +89,7 @@ class AppException implements Exception {
         }
       default:
         {
-          return AppException(-1, "当前网络不可用，请检查您的网络");
+          return AppException(-1, error.error.message!);
         }
     }
   }

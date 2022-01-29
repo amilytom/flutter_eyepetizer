@@ -32,7 +32,7 @@ class MyRouterEnterDirRightToLft implements CustomTransition {
         FadeTransition(
           opacity: animation.drive(opacityTween),
           child: Container(
-            color: const Color.fromRGBO(0, 0, 0, 0.6),
+            color: const Color.fromRGBO(0, 0, 0, 0.7),
           ),
         ),
         SlideTransition(
@@ -75,7 +75,7 @@ class MyRouterEnterDirBottomToTop implements CustomTransition {
         FadeTransition(
           opacity: animation.drive(opacityTween),
           child: Container(
-            color: const Color.fromRGBO(0, 0, 0, 0.6),
+            color: const Color.fromRGBO(0, 0, 0, 0.7),
           ),
         ),
         SlideTransition(

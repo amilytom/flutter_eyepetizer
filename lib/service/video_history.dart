@@ -53,8 +53,7 @@ class HistoryService extends GetxService {
       "videoPoster": videoPoster,
     });
     // 存入
-    // ignore: invalid_use_of_protected_member
-    return SpUtil().setJSON('history', hisList.value);
+    return SpUtil().setJSON('history', hisList.toList());
   }
 
   Future<bool> removeKey(String keyName) async {

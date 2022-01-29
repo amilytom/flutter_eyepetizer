@@ -1,16 +1,15 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
 
 class ImgState extends StatelessWidget {
   final String msg;
   final IconData icon;
   final Color errBgColor;
-  ImgState({
+  const ImgState({
+    Key? key,
     required this.msg,
     required this.icon,
     this.errBgColor = const Color.fromRGBO(245, 245, 245, 1),
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
