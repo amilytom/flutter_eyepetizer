@@ -27,6 +27,7 @@ import 'package:flutter_eyepetizer/utils/toast.dart';
 //
 import 'package:flutter_eyepetizer/widget/my_loading.dart';
 import 'package:flutter_eyepetizer/widget/my_state.dart';
+import 'package:wakelock/wakelock.dart';
 
 class PlayerShowConfig implements ShowConfigAbs {
   @override
@@ -93,6 +94,7 @@ class _VideoDetaillState extends State<VideoDetaill> {
       // 设置播放源
       player.setDataSource(curPlayUrl ?? "", autoPlay: true);
       isInitAnimition = true;
+      Wakelock.enable();
     });
     // if (Platform.isAndroid) {
     //   //设置Android头部的导航栏透明
@@ -114,6 +116,7 @@ class _VideoDetaillState extends State<VideoDetaill> {
 
   @override
   void dispose() async {
+    Wakelock.disable();
     await player.stop();
     player.dispose();
     super.dispose();
