@@ -234,20 +234,22 @@ class FollowTabState extends State<FollowTab>
         ),
         child: ListView.builder(
           itemBuilder: (BuildContext ctx, int idx) {
-            String authorIcon = _itemList[idx]!.data!.header!.icon!;
-            String authorName = _itemList[idx]!.data!.header!.title!;
-            String authorDes = _itemList[idx]!.data!.header!.description!;
+            String authorIcon = _itemList[idx]!.data!.header!.icon ?? "暂无";
+            String authorName = _itemList[idx]!.data!.header!.title ?? "暂无";
+            String authorDes =
+                _itemList[idx]!.data!.header!.description ?? "暂无";
             //
             List<Widget> curCartChildList =
                 _itemList[idx]!.data!.itemList!.map((item) {
               //
-              String curVideoItemPoster = item!.data!.cover!.feed!;
-              String curVideoItemCategory = item.data!.category!;
-              String curVideoItemTitle = item.data!.title!;
-              String curVideoItemSubTime =
-                  DateTime.fromMillisecondsSinceEpoch(item.data!.releaseTime!)
+              String curVideoItemPoster = item!.data!.cover!.feed ?? "";
+              String curVideoItemCategory = item.data!.category ?? "暂无";
+              String curVideoItemTitle = item.data!.title ?? "暂无";
+              String curVideoItemSubTime = item.data!.releaseTime != null
+                  ? DateTime.fromMillisecondsSinceEpoch(item.data!.releaseTime!)
                       .toString()
-                      .substring(0, 19);
+                      .substring(0, 19)
+                  : "暂无";
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: SizedBox(
@@ -265,23 +267,25 @@ class FollowTabState extends State<FollowTab>
                               top: 0,
                               child: VideoFactory(
                                 id: item.data!.id!.toString(),
-                                playUrl: item.data!.playUrl!,
-                                title: item.data!.title!,
-                                typeName: item.data!.category!,
-                                desText: item.data!.description!,
-                                subTime: DateTime.fromMillisecondsSinceEpoch(
-                                        item.data!.releaseTime!)
-                                    .toString()
-                                    .substring(0, 19),
+                                playUrl: item.data!.playUrl ?? "",
+                                title: item.data!.title ?? "暂无",
+                                typeName: item.data!.category ?? "暂无",
+                                desText: item.data!.description ?? "暂无",
+                                subTime: item.data!.releaseTime != null
+                                    ? DateTime.fromMillisecondsSinceEpoch(
+                                            item.data!.releaseTime!)
+                                        .toString()
+                                        .substring(0, 19)
+                                    : '暂无',
                                 avatarUrl: item.data!.author != null
-                                    ? item.data!.author!.icon!
+                                    ? (item.data!.author!.icon ?? "")
                                     : "",
                                 authorDes: item.data!.author != null
-                                    ? item.data!.author!.description!
-                                    : "",
+                                    ? (item.data!.author!.description ?? "暂无")
+                                    : "暂无",
                                 authorName: item.data!.author != null
-                                    ? item.data!.author!.name!
-                                    : "",
+                                    ? (item.data!.author!.name ?? "暂无")
+                                    : "暂无",
                                 videoPoster: curVideoItemPoster,
                                 child: ImageExends(
                                   imgUrl: curVideoItemPoster,
@@ -508,9 +512,9 @@ class _TypesTabState extends State<TypesTab>
             crossAxisSpacing: 3,
           ),
           itemBuilder: (ctx, idx) {
-            String posterUrl = _typeList[idx]!.bgPicture!;
-            String curTypeName = _typeList[idx]!.name!;
-            String headerImg = _typeList[idx]!.headerImage!;
+            String posterUrl = _typeList[idx]!.bgPicture ?? "";
+            String curTypeName = _typeList[idx]!.name ?? "暂无";
+            String headerImg = _typeList[idx]!.headerImage ?? "";
             String typeId = _typeList[idx]!.id!.toString();
             return GestureDetector(
               onTap: () {
@@ -731,7 +735,7 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
         ),
         child: ListView.builder(
           itemBuilder: (BuildContext ctx, int idx) {
-            String curReelItemPoster = _reelList[idx]!.data!.image!;
+            String curReelItemPoster = _reelList[idx]!.data!.image ?? "";
             return Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -746,11 +750,12 @@ class _ReelTabState extends State<ReelTab> with AutomaticKeepAliveClientMixin {
                       String enCodeUrl = _reelList[idx]!.data!.actionUrl!;
                       if (enCodeUrl is String) {
                         String webUrl =
-                            Uri.parse(enCodeUrl).queryParameters["url"]!;
+                            Uri.parse(enCodeUrl).queryParameters["url"] ?? "";
                         String queryId =
-                            Uri.parse(webUrl).queryParameters["nid"]!;
+                            Uri.parse(webUrl).queryParameters["nid"] ?? "";
                         String queryTitle =
-                            Uri.parse(enCodeUrl).queryParameters["title"]!;
+                            Uri.parse(enCodeUrl).queryParameters["title"] ??
+                                "暂无";
                         PageRoutes.addRouter(
                           routeName: PageName.reelDetaill,
                           parameters: {

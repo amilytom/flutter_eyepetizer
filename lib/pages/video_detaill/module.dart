@@ -175,7 +175,7 @@ class _VideoDetaillState extends State<VideoDetaill> {
                             viewSize: viewSize,
                             texturePos: texturePos,
                             pageContent: context,
-                            playerTitle: title ?? "",
+                            playerTitle: title ?? "暂无",
                             showConfig: vSkinCfg,
                             curPlayUrl: curPlayUrl ?? "",
                           );
@@ -186,13 +186,13 @@ class _VideoDetaillState extends State<VideoDetaill> {
           ),
           VideoInfo(
             id: videoId ?? "",
-            title: title ?? "",
-            typeName: typeName ?? "",
-            desText: desText ?? "",
-            subTime: subTime ?? "",
+            title: title ?? "暂无",
+            typeName: typeName ?? "暂无",
+            desText: desText ?? "暂无",
+            subTime: subTime ?? "暂无",
             avatarUrl: avatarUrl ?? "",
-            authorDes: authorDes ?? "",
-            authorName: authorName ?? "",
+            authorDes: authorDes ?? "暂无",
+            authorName: authorName ?? "暂无",
             isNotAuthor: isNotAuthor,
             // player: controller,
           ),
@@ -351,24 +351,26 @@ class VideoInfoState extends State<VideoInfo> {
               children: _itemList.map((e) {
                 return VideoFactory(
                   id: e!.data!.id!.toString(),
-                  playUrl: e.data!.playUrl!,
-                  title: e.data!.title!,
-                  typeName: e.data!.category!,
-                  desText: e.data!.description!,
+                  playUrl: e.data!.playUrl ?? "",
+                  title: e.data!.title ?? "暂无",
+                  typeName: e.data!.category ?? "暂无",
+                  desText: e.data!.description ?? "暂无",
                   subTime: e.data!.releaseTime != null
                       ? DateTime.fromMillisecondsSinceEpoch(
                               e.data!.releaseTime!)
                           .toString()
                           .substring(0, 19)
                       : "暂无",
-                  avatarUrl:
-                      e.data!.author != null ? e.data!.author!.icon! : "",
-                  authorDes: e.data!.author != null
-                      ? e.data!.author!.description!
+                  avatarUrl: e.data!.author != null
+                      ? (e.data!.author!.icon ?? "")
                       : "",
-                  authorName:
-                      e.data!.author != null ? e.data!.author!.name! : "",
-                  videoPoster: e.data!.cover!.feed!,
+                  authorDes: e.data!.author != null
+                      ? (e.data!.author!.description ?? "暂无")
+                      : "暂无",
+                  authorName: e.data!.author != null
+                      ? (e.data!.author!.name ?? "暂无")
+                      : "暂无",
+                  videoPoster: e.data!.cover!.feed ?? "",
                   isPopCurRoute: true,
                   routerPopEnter: () async {
                     // await player.pause();
@@ -387,7 +389,7 @@ class VideoInfoState extends State<VideoInfo> {
                             width: 150,
                             height: 100,
                             child: ImageExends(
-                              imgUrl: e.data!.cover!.feed!,
+                              imgUrl: e.data!.cover!.feed ?? "",
                             ),
                           ),
                           Expanded(
@@ -398,7 +400,7 @@ class VideoInfoState extends State<VideoInfo> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    e.data!.title!,
+                                    e.data!.title ?? "暂无",
                                     maxLines: 2,
                                     style: const TextStyle(
                                       fontSize: 16,
@@ -408,7 +410,7 @@ class VideoInfoState extends State<VideoInfo> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    e.data!.description!,
+                                    e.data!.description ?? "暂无",
                                     maxLines: 2,
                                     style: const TextStyle(
                                       fontSize: 13,

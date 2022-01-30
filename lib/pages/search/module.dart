@@ -233,11 +233,9 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
             itemBuilder: (BuildContext ctx, int idx) {
               bool isNotExistAuthor =
                   _itemList[idx]!.data!.author == null ? true : false;
-              String videoTitle = _itemList[idx]!.data!.title!;
-              String videoCategory = _itemList[idx]!.data!.category!;
-              // String authorIcon = _itemList[idx]!.data!.author!.icon!;
-              // String authorName = _itemList[idx]!.data!.author!.name!;
-              String videoPoster = _itemList[idx]!.data!.cover!.feed!;
+              String videoTitle = _itemList[idx]!.data!.title ?? "暂无";
+              String videoCategory = _itemList[idx]!.data!.category ?? "暂无";
+              String videoPoster = _itemList[idx]!.data!.cover!.feed ?? "";
               return Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: Column(
@@ -253,23 +251,30 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                             top: 0,
                             child: VideoFactory(
                               id: _itemList[idx]!.data!.id!.toString(),
-                              playUrl: _itemList[idx]!.data!.playUrl!,
-                              title: _itemList[idx]!.data!.title!,
-                              typeName: _itemList[idx]!.data!.category!,
-                              desText: _itemList[idx]!.data!.description!,
-                              subTime: DateTime.fromMillisecondsSinceEpoch(
-                                      _itemList[idx]!.data!.releaseTime!)
-                                  .toString()
-                                  .substring(0, 19),
+                              playUrl: _itemList[idx]!.data!.playUrl ?? "",
+                              title: _itemList[idx]!.data!.title ?? "暂无",
+                              typeName: _itemList[idx]!.data!.category ?? "暂无",
+                              desText:
+                                  _itemList[idx]!.data!.description ?? "暂无",
+                              subTime: _itemList[idx]!.data!.releaseTime != null
+                                  ? DateTime.fromMillisecondsSinceEpoch(
+                                          _itemList[idx]!.data!.releaseTime!)
+                                      .toString()
+                                      .substring(0, 19)
+                                  : "暂无",
                               avatarUrl: _itemList[idx]!.data!.author != null
-                                  ? _itemList[idx]!.data!.author!.icon!
+                                  ? (_itemList[idx]!.data!.author!.icon ?? "")
                                   : "",
                               authorDes: _itemList[idx]!.data!.author != null
-                                  ? _itemList[idx]!.data!.author!.description!
-                                  : "",
+                                  ? (_itemList[idx]!
+                                          .data!
+                                          .author!
+                                          .description ??
+                                      "暂无")
+                                  : "暂无",
                               authorName: _itemList[idx]!.data!.author != null
-                                  ? _itemList[idx]!.data!.author!.name!
-                                  : "",
+                                  ? (_itemList[idx]!.data!.author!.name ?? "暂无")
+                                  : "暂无",
                               videoPoster: videoPoster,
                               child: ImageExends(
                                 imgUrl: videoPoster,
@@ -300,14 +305,10 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                       ),
                     ),
                     VideoBanner(
-                      avatarUrl: isNotExistAuthor
-                          ? ""
-                          : _itemList[idx]!.data!.author!.icon!,
+                      avatarUrl: _itemList[idx]!.data!.author!.icon ?? "",
                       rowTitle: videoTitle,
                       isAssets: isNotExistAuthor,
-                      rowDes: isNotExistAuthor
-                          ? "暂无"
-                          : _itemList[idx]!.data!.author!.name!,
+                      rowDes: _itemList[idx]!.data!.author!.name ?? "暂无",
                       slotChild: MyIconButton(
                         icon: const Icon(
                           Icons.share,

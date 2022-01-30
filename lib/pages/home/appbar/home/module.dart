@@ -295,9 +295,9 @@ class _BuildItemsState extends State<BuildItems> {
   @override
   Widget build(BuildContext context) {
     bool isNotExistAuthor = widget.target!.data!.author == null ? true : false;
-    String videoTitle = widget.target!.data!.title!;
-    String videoCategory = widget.target!.data!.category!;
-    String videoPoster = widget.target!.data!.cover!.feed!;
+    String videoTitle = widget.target!.data!.title ?? "暂无";
+    String videoCategory = widget.target!.data!.category ?? "暂无";
+    String videoPoster = widget.target!.data!.cover!.feed ?? "";
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
@@ -313,23 +313,25 @@ class _BuildItemsState extends State<BuildItems> {
                   top: 0,
                   child: VideoFactory(
                     id: widget.target!.data!.id!.toString(),
-                    playUrl: widget.target!.data!.playUrl!,
-                    title: widget.target!.data!.title!,
-                    typeName: widget.target!.data!.category!,
-                    desText: widget.target!.data!.description!,
-                    subTime: DateTime.fromMillisecondsSinceEpoch(
-                            widget.target!.data!.releaseTime!)
-                        .toString()
-                        .substring(0, 19),
+                    playUrl: widget.target!.data!.playUrl ?? "",
+                    title: widget.target!.data!.title ?? "暂无",
+                    typeName: widget.target!.data!.category ?? "暂无",
+                    desText: widget.target!.data!.description ?? "暂无",
+                    subTime: widget.target!.data!.releaseTime != null
+                        ? DateTime.fromMillisecondsSinceEpoch(
+                                widget.target!.data!.releaseTime!)
+                            .toString()
+                            .substring(0, 19)
+                        : "暂无",
                     avatarUrl: widget.target!.data!.author != null
-                        ? widget.target!.data!.author!.icon!
+                        ? (widget.target!.data!.author!.icon ?? "")
                         : "",
                     authorDes: widget.target!.data!.author != null
-                        ? widget.target!.data!.author!.description!
-                        : "",
+                        ? (widget.target!.data!.author!.description ?? "暂无")
+                        : "暂无",
                     authorName: widget.target!.data!.author != null
-                        ? widget.target!.data!.author!.name!
-                        : "",
+                        ? (widget.target!.data!.author!.name ?? "暂无")
+                        : "暂无",
                     videoPoster: videoPoster,
                     child: ImageExends(
                       imgUrl: videoPoster,
@@ -359,12 +361,10 @@ class _BuildItemsState extends State<BuildItems> {
             ),
           ),
           VideoBanner(
-            avatarUrl:
-                isNotExistAuthor ? "" : widget.target!.data!.author!.icon!,
+            avatarUrl: widget.target!.data!.author!.icon ?? "",
             rowTitle: videoTitle,
             isAssets: isNotExistAuthor,
-            rowDes:
-                isNotExistAuthor ? "暂无" : widget.target!.data!.author!.name!,
+            rowDes: widget.target!.data!.author!.name ?? "暂无",
             slotChild: MyIconButton(
               icon: const Icon(
                 Icons.share,
@@ -412,8 +412,8 @@ class _BuildHeaderState extends State<BuildHeader> {
             autoplay: true,
             controller: widget.swiperController,
             itemBuilder: (BuildContext context, int idx) {
-              String posterUrl = widget.list[idx]!.data!.cover!.feed!;
-              String videoTitle = widget.list[idx]!.data!.title!;
+              String posterUrl = widget.list[idx]!.data!.cover!.feed ?? "";
+              String videoTitle = widget.list[idx]!.data!.title ?? "暂无";
               return SizedBox(
                 height: 220,
                 child: Stack(
@@ -421,23 +421,26 @@ class _BuildHeaderState extends State<BuildHeader> {
                     Positioned(
                       child: VideoFactory(
                         id: widget.list[idx]!.data!.id!.toString(),
-                        playUrl: widget.list[idx]!.data!.playUrl!,
-                        title: widget.list[idx]!.data!.title!,
-                        typeName: widget.list[idx]!.data!.category!,
-                        desText: widget.list[idx]!.data!.description!,
-                        subTime: DateTime.fromMillisecondsSinceEpoch(
-                                widget.list[idx]!.data!.releaseTime!)
-                            .toString()
-                            .substring(0, 19),
+                        playUrl: widget.list[idx]!.data!.playUrl ?? "",
+                        title: widget.list[idx]!.data!.title ?? "暂无",
+                        typeName: widget.list[idx]!.data!.category ?? "暂无",
+                        desText: widget.list[idx]!.data!.description ?? "暂无",
+                        subTime: widget.list[idx]!.data!.releaseTime != null
+                            ? DateTime.fromMillisecondsSinceEpoch(
+                                    widget.list[idx]!.data!.releaseTime!)
+                                .toString()
+                                .substring(0, 19)
+                            : "暂无",
                         avatarUrl: widget.list[idx]!.data!.author != null
-                            ? widget.list[idx]!.data!.author!.icon!
+                            ? (widget.list[idx]!.data!.author!.icon ?? "")
                             : "",
                         authorDes: widget.list[idx]!.data!.author != null
-                            ? widget.list[idx]!.data!.author!.description!
-                            : "",
+                            ? (widget.list[idx]!.data!.author!.description ??
+                                "暂无")
+                            : "暂无",
                         authorName: widget.list[idx]!.data!.author != null
-                            ? widget.list[idx]!.data!.author!.name!
-                            : "",
+                            ? (widget.list[idx]!.data!.author!.name ?? "暂无")
+                            : "暂无",
                         videoPoster: posterUrl,
                         child: ImageExends(
                           imgUrl: posterUrl,
@@ -469,8 +472,9 @@ class _BuildHeaderState extends State<BuildHeader> {
               );
             },
             itemCount: widget.list.length,
-            pagination:
-                const SwiperPagination(margin: EdgeInsets.only(bottom: 45)),
+            pagination: const SwiperPagination(
+              margin: EdgeInsets.only(bottom: 45),
+            ),
           ),
         ),
       ),

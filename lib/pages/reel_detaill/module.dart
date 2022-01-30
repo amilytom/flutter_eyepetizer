@@ -158,7 +158,7 @@ class Header extends StatelessWidget {
             child: SizedBox(
               height: 220,
               child: ImageExends(
-                imgUrl: bgImg!,
+                imgUrl: bgImg ?? "",
               ),
             ),
           ),
@@ -193,7 +193,7 @@ class Header extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
-                          title!,
+                          title ?? "暂无",
                           maxLines: 1,
                           style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
@@ -208,7 +208,7 @@ class Header extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
-                        desText!,
+                        desText ?? "暂无",
                         maxLines: 3,
                         style: const TextStyle(
                           fontSize: 12,
@@ -255,7 +255,7 @@ class CollList extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: children!.map((e) {
-            String videoPoster = e!.data!.content!.data!.cover!.feed!;
+            String videoPoster = e!.data!.content!.data!.cover!.feed ?? "";
             return Container(
               decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: Colors.black12)),
@@ -265,18 +265,20 @@ class CollList extends StatelessWidget {
                 child: Column(
                   children: [
                     VideoBanner(
-                      avatarUrl: e.data!.content!.data!.author!.icon!,
-                      rowTitle: e.data!.content!.data!.author!.name!,
+                      avatarUrl: e.data!.content!.data!.author!.icon ?? "",
+                      rowTitle: e.data!.content!.data!.author!.name ?? "暂无",
                       slotChild: Container(),
-                      rowDes: DateTime.fromMillisecondsSinceEpoch(
-                              e.data!.content!.data!.releaseTime!)
-                          .toString()
-                          .substring(0, 19),
+                      rowDes: e.data!.content!.data!.releaseTime != null
+                          ? DateTime.fromMillisecondsSinceEpoch(
+                                  e.data!.content!.data!.releaseTime!)
+                              .toString()
+                              .substring(0, 19)
+                          : "暂无",
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        e.data!.content!.data!.title!,
+                        e.data!.content!.data!.title ?? "暂无",
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -287,7 +289,7 @@ class CollList extends StatelessWidget {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        e.data!.content!.data!.descriptionEditor!,
+                        e.data!.content!.data!.descriptionEditor ?? "暂无",
                         maxLines: 3,
                         style: const TextStyle(
                           color: Colors.black38,
@@ -301,23 +303,26 @@ class CollList extends StatelessWidget {
                       height: 210,
                       child: VideoFactory(
                         id: e.id!.toString(),
-                        playUrl: e.data!.content!.data!.playUrl!,
-                        title: e.data!.content!.data!.title!,
-                        typeName: e.data!.content!.data!.category!,
-                        desText: e.data!.content!.data!.description!,
-                        subTime: DateTime.fromMillisecondsSinceEpoch(
-                                e.data!.content!.data!.releaseTime!)
-                            .toString()
-                            .substring(0, 19),
+                        playUrl: e.data!.content!.data!.playUrl ?? "",
+                        title: e.data!.content!.data!.title ?? "暂无",
+                        typeName: e.data!.content!.data!.category ?? "暂无",
+                        desText: e.data!.content!.data!.description ?? "暂无",
+                        subTime: e.data!.content!.data!.releaseTime != null
+                            ? DateTime.fromMillisecondsSinceEpoch(
+                                    e.data!.content!.data!.releaseTime!)
+                                .toString()
+                                .substring(0, 19)
+                            : "暂无",
                         avatarUrl: e.data!.content!.data!.author != null
-                            ? e.data!.content!.data!.author!.icon!
+                            ? (e.data!.content!.data!.author!.icon ?? "")
                             : "",
                         authorDes: e.data!.content!.data!.author != null
-                            ? e.data!.content!.data!.author!.description!
-                            : "",
+                            ? (e.data!.content!.data!.author!.description ??
+                                "暂无")
+                            : "暂无",
                         authorName: e.data!.content!.data!.author != null
-                            ? e.data!.content!.data!.author!.name!
-                            : "",
+                            ? (e.data!.content!.data!.author!.name ?? "暂无")
+                            : "暂无",
                         videoPoster: videoPoster,
                         child: ImageExends(
                           imgUrl: videoPoster,

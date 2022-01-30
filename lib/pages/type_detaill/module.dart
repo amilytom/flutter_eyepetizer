@@ -146,11 +146,9 @@ class _TypeDetaillState extends State<TypeDetaill> {
             (ctx, idx) {
               bool isNotExistAuthor =
                   _itemList[idx]!.data!.author == null ? true : false;
-              String videoPoster = _itemList[idx]!.data!.cover!.feed!;
-              String videoCategory = _itemList[idx]!.data!.category!;
-              String videoTitle = _itemList[idx]!.data!.title!;
-              // String authorIcon = _typeInfo!.itemList![idx]!.data!.author!.icon!;
-              // String authorName = _typeInfo!.itemList![idx]!.data!.author!.name!;
+              String videoPoster = _itemList[idx]!.data!.cover!.feed ?? "";
+              String videoCategory = _itemList[idx]!.data!.category ?? "暂无";
+              String videoTitle = _itemList[idx]!.data!.title ?? "暂无";
               return Padding(
                 padding: const EdgeInsets.only(
                   top: 10,
@@ -171,23 +169,30 @@ class _TypeDetaillState extends State<TypeDetaill> {
                             top: 0,
                             child: VideoFactory(
                               id: _itemList[idx]!.data!.id!.toString(),
-                              playUrl: _itemList[idx]!.data!.playUrl!,
-                              title: _itemList[idx]!.data!.title!,
-                              typeName: _itemList[idx]!.data!.category!,
-                              desText: _itemList[idx]!.data!.description!,
-                              subTime: DateTime.fromMillisecondsSinceEpoch(
-                                      _itemList[idx]!.data!.releaseTime!)
-                                  .toString()
-                                  .substring(0, 19),
+                              playUrl: _itemList[idx]!.data!.playUrl ?? "",
+                              title: _itemList[idx]!.data!.title ?? "暂无",
+                              typeName: _itemList[idx]!.data!.category ?? "暂无",
+                              desText:
+                                  _itemList[idx]!.data!.description ?? "暂无",
+                              subTime: _itemList[idx]!.data!.releaseTime != null
+                                  ? DateTime.fromMillisecondsSinceEpoch(
+                                          _itemList[idx]!.data!.releaseTime!)
+                                      .toString()
+                                      .substring(0, 19)
+                                  : "暂无",
                               avatarUrl: _itemList[idx]!.data!.author != null
-                                  ? _itemList[idx]!.data!.author!.icon!
+                                  ? (_itemList[idx]!.data!.author!.icon ?? "")
                                   : "",
                               authorDes: _itemList[idx]!.data!.author != null
-                                  ? _itemList[idx]!.data!.author!.description!
-                                  : "",
+                                  ? (_itemList[idx]!
+                                          .data!
+                                          .author!
+                                          .description ??
+                                      "暂无")
+                                  : "暂无",
                               authorName: _itemList[idx]!.data!.author != null
-                                  ? _itemList[idx]!.data!.author!.name!
-                                  : "",
+                                  ? (_itemList[idx]!.data!.author!.name ?? "暂无")
+                                  : "暂无",
                               videoPoster: videoPoster,
                               child: ImageExends(
                                 imgUrl: videoPoster,
@@ -218,14 +223,10 @@ class _TypeDetaillState extends State<TypeDetaill> {
                       ),
                     ),
                     VideoBanner(
-                      avatarUrl: isNotExistAuthor
-                          ? ""
-                          : _itemList[idx]!.data!.author!.icon!,
+                      avatarUrl: _itemList[idx]!.data!.author!.icon ?? "",
                       rowTitle: videoTitle,
                       isAssets: isNotExistAuthor,
-                      rowDes: isNotExistAuthor
-                          ? ""
-                          : _itemList[idx]!.data!.author!.name!,
+                      rowDes: _itemList[idx]!.data!.author!.name ?? "暂无",
                       slotChild: MyIconButton(
                         icon: const Icon(
                           Icons.share,
@@ -320,7 +321,7 @@ class _TypeDetaillState extends State<TypeDetaill> {
       appBar: isInit == null
           ? AppBar(
               elevation: 8.0,
-              title: Text(Get.parameters["typeName"]!),
+              title: Text(Get.parameters["typeName"] ?? "暂无"),
             )
           : null,
       body: bodyView,
