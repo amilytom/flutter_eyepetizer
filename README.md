@@ -5,8 +5,8 @@
 > 本项目仅供学习参考，请勿用于任何商业、非法用途。由此带来的法律责任，本人概不承担！
 
 ## apk下载体验
-[百度云](https://pan.baidu.com/s/13bcwLm039D6jpSGuA0lJMw) 提取码：istz   
-[蓝奏云](https://wwd.lanzoup.com/iEeqazfd8ef) 提取码：azus 
+[百度云](https://pan.baidu.com/s/1btmx8TOW0o1JQlutxsWj0g) 提取码：tg8w  
+[蓝奏云](https://wwd.lanzoup.com/isfQ9zgi80h) 提取码：7ij6
 
 ## 其他开源项目
 
