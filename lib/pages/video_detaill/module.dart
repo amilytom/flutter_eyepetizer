@@ -116,10 +116,10 @@ class _VideoDetaillState extends State<VideoDetaill> {
 
   @override
   void dispose() async {
+    super.dispose();
     Wakelock.disable();
     await player.stop();
-    player.dispose();
-    super.dispose();
+    player.release();
   }
 
   @override
