@@ -76,7 +76,7 @@ class _VideoDetaillState extends State<VideoDetaill> {
   ShowConfigAbs vSkinCfg = PlayerShowConfig();
 
   Future<void> initEvent() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 400));
     // 加入历史记录
     historyService.add(
       id: videoId ?? "",
@@ -134,55 +134,35 @@ class _VideoDetaillState extends State<VideoDetaill> {
           Container(
             height: playerBoxWidth,
             color: Colors.black,
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  top: 0,
-                  child: Hero(
-                    tag: videoId!,
-                    child: Container(
-                      height: playerBoxWidth,
-                      color: Colors.black,
-                      child: Image(
-                        image: NetworkImage(videoPoster!),
-                      ),
-                    ),
-                  ),
-                ),
-                !isInitAnimition
-                    ? Container(
-                        height: playerBoxWidth,
-                        color: Colors.black,
-                      )
-                    : FijkView(
-                        height: playerBoxWidth,
-                        color: Colors.black,
-                        fit: FijkFit.cover,
+            child: !isInitAnimition
+                ? Container(
+                    height: playerBoxWidth,
+                    color: Colors.black,
+                  )
+                : FijkView(
+                    height: playerBoxWidth,
+                    color: Colors.black,
+                    fit: FijkFit.cover,
+                    player: player,
+                    panelBuilder: (
+                      FijkPlayer player,
+                      FijkData data,
+                      BuildContext context,
+                      Size viewSize,
+                      Rect texturePos,
+                    ) {
+                      /// 使用自定义的布局
+                      return CustomFijkPanel(
                         player: player,
-                        panelBuilder: (
-                          FijkPlayer player,
-                          FijkData data,
-                          BuildContext context,
-                          Size viewSize,
-                          Rect texturePos,
-                        ) {
-                          /// 使用自定义的布局
-                          return CustomFijkPanel(
-                            player: player,
-                            viewSize: viewSize,
-                            texturePos: texturePos,
-                            pageContent: context,
-                            playerTitle: title ?? "暂无",
-                            showConfig: vSkinCfg,
-                            curPlayUrl: curPlayUrl ?? "",
-                          );
-                        },
-                      ),
-              ],
-            ),
+                        viewSize: viewSize,
+                        texturePos: texturePos,
+                        pageContent: context,
+                        playerTitle: title ?? "暂无",
+                        showConfig: vSkinCfg,
+                        curPlayUrl: curPlayUrl ?? "",
+                      );
+                    },
+                  ),
           ),
           VideoInfo(
             id: videoId ?? "",

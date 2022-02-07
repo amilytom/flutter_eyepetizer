@@ -59,12 +59,7 @@ class VideoFactory extends StatelessWidget {
           },
         );
       },
-      child: isHero
-          ? Hero(
-              tag: id,
-              child: child,
-            )
-          : child,
+      child: child,
     );
   }
 }

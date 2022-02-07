@@ -41,58 +41,58 @@ class VideoHistory extends GetView<VideoHistoryStore> {
                 right: BorderSide(color: Colors.black12),
               ),
             ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 150,
-                  height: 100,
-                  child: VideoFactory(
-                    id: e["id"] ?? "",
-                    playUrl: e["playUrl"] ?? "",
-                    authorDes: e["authorDes"] ?? "暂无",
-                    authorName: e["authorName"] ?? "暂无",
-                    avatarUrl: e["avatarUrl"] ?? "",
-                    subTime: e["subTime"] ?? "暂无",
-                    desText: e["desText"] ?? "暂无",
-                    title: e["title"] ?? "暂无",
-                    typeName: e["typeName"] ?? "暂无",
-                    videoPoster: e["videoPoster"] ?? "",
-                    isHero: false,
+            child: VideoFactory(
+              id: e["id"] ?? "",
+              playUrl: e["playUrl"] ?? "",
+              authorDes: e["authorDes"] ?? "暂无",
+              authorName: e["authorName"] ?? "暂无",
+              avatarUrl: e["avatarUrl"] ?? "",
+              subTime: e["subTime"] ?? "暂无",
+              desText: e["desText"] ?? "暂无",
+              title: e["title"] ?? "暂无",
+              typeName: e["typeName"] ?? "暂无",
+              videoPoster: e["videoPoster"] ?? "",
+              isHero: false,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    height: 100,
                     child: ImageExends(
                       imgUrl: e["videoPoster"] ?? "",
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          e["title"],
-                          maxLines: 2,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            e["title"],
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          e["desText"],
-                          maxLines: 2,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            overflow: TextOverflow.ellipsis,
+                          const SizedBox(height: 2),
+                          Text(
+                            e["desText"],
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         );

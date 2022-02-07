@@ -11,7 +11,7 @@ class MyRouterEnterDirRightToLft implements CustomTransition {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    const curve = Curves.easeInOut;
+    const curve = Curves.easeOut;
 
     var moveTween = Tween(
       begin: const Offset(1.0, 0.0),
@@ -54,7 +54,7 @@ class MyRouterEnterDirBottomToTop implements CustomTransition {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    const curve = Curves.easeInOut;
+    const curve = Curves.easeOut;
 
     var moveTween = Tween(
       begin: const Offset(0.0, 1.0),
