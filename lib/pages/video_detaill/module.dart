@@ -124,59 +124,67 @@ class _VideoDetaillState extends State<VideoDetaill> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: MediaQueryData.fromWindow(window).padding.top,
-            color: Colors.black,
-          ),
-          Container(
-            height: playerBoxWidth,
-            color: Colors.black,
-            child: !isInitAnimition
-                ? Container(
-                    height: playerBoxWidth,
-                    color: Colors.black,
-                  )
-                : FijkView(
-                    height: playerBoxWidth,
-                    color: Colors.black,
-                    fit: FijkFit.cover,
-                    player: player,
-                    panelBuilder: (
-                      FijkPlayer player,
-                      FijkData data,
-                      BuildContext context,
-                      Size viewSize,
-                      Rect texturePos,
-                    ) {
-                      /// 使用自定义的布局
-                      return CustomFijkPanel(
-                        player: player,
-                        viewSize: viewSize,
-                        texturePos: texturePos,
-                        pageContent: context,
-                        playerTitle: title ?? "暂无",
-                        showConfig: vSkinCfg,
-                        curPlayUrl: curPlayUrl ?? "",
-                      );
-                    },
-                  ),
-          ),
-          VideoInfo(
-            id: videoId ?? "",
-            title: title ?? "暂无",
-            typeName: typeName ?? "暂无",
-            desText: desText ?? "暂无",
-            subTime: subTime ?? "暂无",
-            avatarUrl: avatarUrl ?? "",
-            authorDes: authorDes ?? "暂无",
-            authorName: authorName ?? "暂无",
-            isNotAuthor: isNotAuthor,
-            // player: controller,
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        setState(() {
+          isInitAnimition = false;
+        });
+        return true;
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(
+              height: MediaQueryData.fromWindow(window).padding.top,
+              color: Colors.black,
+            ),
+            Container(
+              height: playerBoxWidth,
+              color: Colors.black,
+              child: !isInitAnimition
+                  ? Container(
+                      height: playerBoxWidth,
+                      color: Colors.black,
+                    )
+                  : FijkView(
+                      height: playerBoxWidth,
+                      color: Colors.black,
+                      fit: FijkFit.cover,
+                      player: player,
+                      panelBuilder: (
+                        FijkPlayer player,
+                        FijkData data,
+                        BuildContext context,
+                        Size viewSize,
+                        Rect texturePos,
+                      ) {
+                        /// 使用自定义的布局
+                        return CustomFijkPanel(
+                          player: player,
+                          viewSize: viewSize,
+                          texturePos: texturePos,
+                          pageContent: context,
+                          playerTitle: title ?? "暂无",
+                          showConfig: vSkinCfg,
+                          curPlayUrl: curPlayUrl ?? "",
+                        );
+                      },
+                    ),
+            ),
+            VideoInfo(
+              id: videoId ?? "",
+              title: title ?? "暂无",
+              typeName: typeName ?? "暂无",
+              desText: desText ?? "暂无",
+              subTime: subTime ?? "暂无",
+              avatarUrl: avatarUrl ?? "",
+              authorDes: authorDes ?? "暂无",
+              authorName: authorName ?? "暂无",
+              isNotAuthor: isNotAuthor,
+              // player: controller,
+            ),
+          ],
+        ),
       ),
     );
   }
